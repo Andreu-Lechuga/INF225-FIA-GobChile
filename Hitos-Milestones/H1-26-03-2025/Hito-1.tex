@@ -1,21 +1,70 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{setspace}
 
-\title{Hito 1: SEMAT}
-\author{
-    Grupo 1: \\
-    Matias Pajarito \\
-    Aymara Rojas \\
-    Pedro Miranda \\
-    Andreu Lechuga\\
-    }
-\date{\today}
+% Márgenes y estilo
+\geometry{a4paper, margin=2.5cm}
+\setstretch{1.15}
+
+% Encabezado y pie de página
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Hito 1: SEMAT}
+\lhead{INF225 - Ingeniería de Software}
+\cfoot{\thepage}
+
+% Título de secciones en negrita y tamaño ajustado
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
 
 \begin{document}
 
-\maketitle
+% LOGO y encabezado
+\begin{minipage}{0.2\textwidth}
+    \includegraphics[width=\linewidth]{logo-usm.jpg} % Cambia logo.png por tu archivo real
+\end{minipage}
+\hfill
+\begin{minipage}{0.75\textwidth}
+    \centering
+    \vspace{0.5cm}
+    {\LARGE \textbf{Hito 1: SEMAT}}\\[0.4cm]
+    {\large Universidad Tecnica Federico Santa Maria}\\
+    {\large Asignatura: INF225 - Ingeniería de Software}\\
+    {\large Fecha: \today}
+\end{minipage}
 
-En el siguiente documento analizaremos el estado actual de nuestro proyecto 
-utilizando el framework SEMAT como guia y referencia.
+\vspace{1.5cm}
+
+% Participantes
+\noindent
+\textbf{Grupo 1:}\\
+Matias Pajarito Catalan - \\
+Pedro Miranda Miranda - \\
+Aymara Rojas Arellano - \\
+Andreu Lechuga Gonzalez - 202073595-6
+
+\vspace{1cm}
+
+\section*{Introducción}
+
+El presente documento tiene como propósito analizar 
+el desarrollo de nuestro proyecto de software utilizando 
+el \textbf{framework SEMAT (Software Engineering Method 
+and Theory)}. Este enfoque nos permite observar el 
+progreso y madurez del proyecto desde distintas 
+perspectivas, conocidas como "Alphas", facilitando una 
+gestión más clara, estructurada y alineada con buenas 
+prácticas de ingeniería de software.
+
+\newpage
+
+\section{Alpha 1 supongo}
+estoy pensando como continuar
 
 \end{document}
