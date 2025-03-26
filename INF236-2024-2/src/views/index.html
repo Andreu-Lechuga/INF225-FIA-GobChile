@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal - Gestión de Boletines</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Contenedor principal que agrupa header, caja y footer */
+        .main-wrapper {
+            width: 90%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Header alineado con la caja */
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px 0;
+        }
+
+        .header-title {
+            color: #2c3e50;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        .logo-space {
+            width: 200px;
+            height: 130px;
+            /* background-color: #f0f0f0; /* Comentado - solo para visualizar el espacio */
+        }
+        /* Contenedor para los logos */
+        .logos-container {
+            display: flex;
+            gap: 1px;  /* Espacio entre los logos */
+            align-items: center;
+        }
+
+        /* Ajustar el tamaño de los espacios para los logos */
+        .logo-space {
+            width: 150px;  /* Ajustado para que ambos logos quepan */
+            height: 130px;
+        }
+
+        /* Ajuste responsivo */
+        @media (max-width: 600px) {
+            .logos-container {
+                gap: 10px;
+            }
+
+            .logo-space {
+                width: 100px;
+                height: 90px;
+            }
+        }
+
+        /* Caja principal */
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-title {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        color: #2c3e50;
+    }
+
+    .header-title h1 {
+        font-size: 1.4em;
+        font-weight: 500;
+        margin: 0;
+        text-shadow: none;
+    }
+
+    .header-title h2 {
+        font-size: 0.8em;
+        font-weight: 500;
+        color: #546e7a;
+        margin: 0;
+    }
+
+    /* Estilos para los títulos dentro del container */
+    .container h2 {
+        color: #2c3e50;
+        font-size: 1.4em;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .container h1 {
+        color: #2c3e50;
+        font-size: 2em;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    /* Ajuste del espacio del contenedor para los nuevos títulos */
+    .container {
+        padding: 30px 40px;
+    }
+
+    /* Elimina el margin-bottom del último p que ya no necesitamos */
+    p {
+        margin-bottom: 0;
+    }
+
+        /* Footer version */
+        .version-footer {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 0.9em;
+            padding: 10px 0;
+        }
+
+        .version-footer span {
+            color: #e74c3c; /* Color rojo para el corazón */
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        p {
+            color: #576574;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 0 auto;
+        }
+
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 250px;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 73, 94, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: all 0.6s;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 73, 94, 0.3);
+        }
+
+        .button:hover:before {
+            left: 100%;
+        }
+
+        .button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(52, 73, 94, 0.2);
+        }
+
+        .button-generate {
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+        }
+
+        .button-view {
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            
+        }
+
+        .button-status {
+            background: linear-gradient(145deg, #2980b9, #2c3e50);
+        }
+
+        /* Diseño responsivo */
+        @media (max-width: 600px) {
+            .main-wrapper {
+                width: 95%;
+            }
+
+            .header-title {
+                font-size: 1.4em;
+            }
+
+            .logo-space {
+                width: 150px;
+                height: 45px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .button {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Wrapper principal que mantiene todo alineado -->
+    <div class="main-wrapper">
+        <!-- Header alineado con la caja -->
+        <div class="header-content">
+            <div class="header-title">
+                <h1>Gobierno de Chile</h1>
+                <h2>Ministerio de Agricultura</h2>
+            </div>
+            
+            <div class="logos-container">
+                <div class="logo-space">
+                    <img src="../assets/img/logo-min-agricultura.png" alt="Logo Ministerio de Agricultura" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <!--
+                <div class="logo-space">
+                    <img src="../assets/img/logo-fia-4.jpeg" alt="Logo FIA" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                -->
+            </div>
+        </div>
+
+        <!-- Contenedor principal -->
+        <div class="container">
+            
+            <h2>Menu Principal</h2>
+            
+
+            <div class="buttons-container">
+                <a href="formulario.html" class="button button-generate">
+                    Generar Boletín
+                </a>
+                <a href="boletines.html" class="button button-view">
+                    Inspeccionar Boletines
+                </a>
+                <a href="estado-boletines.html" class="button button-status">
+                    Ver Estado General
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer con versión -->
+        <div class="version-footer">
+            V.1.0.1 <span>♥</span> Creado por Grupo 12 INF236
+        </div>
+    </div>
+</body>
+</html>

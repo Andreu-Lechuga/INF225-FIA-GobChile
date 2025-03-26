@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado de los Boletines</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Estado de los Boletines</h1>
+    <p>Aquí puedes ver el estado actual de los boletines en proceso o finalizados.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Temática</th>
+                <th>Estado</th>
+                <th>Fecha de registro</th>
+                <th>Días desde el registro</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Sequía</td>
+                <td>Registrado</td>
+                <td>Hoy</td>
+                <td>0 dias</td>
+            </tr>
+            <tr>
+                <td>Plagas Agrícolas</td>
+                <td>Generándose</td>
+                <td>2024-10-22</td>
+                <td>1 dia</td>
+            </tr>
+            <tr>
+                <td>Riego en Escasez Hídrica</td>
+                <td>En revisión</td>
+                <td>2024-10-07</td>
+                <td>15 días</td>
+            </tr>
+            <tr>
+                <td>Cultivos Resistentes a Plagas</td>
+                <td>Aprobado</td>
+                <td>2024-10-01</td>
+                <td>21 días</td>
+            </tr>
+            <tr>
+                <td>Cambio Climático</td>
+                <td>Subido</td>
+                <td>2024-09-30</td>
+                <td>22 días</td>
+            </tr>
+        </tbody>
+
+    </table>
+    
+    <a href="index.html">Volver a la página principal</a>
+</body>
+</html>

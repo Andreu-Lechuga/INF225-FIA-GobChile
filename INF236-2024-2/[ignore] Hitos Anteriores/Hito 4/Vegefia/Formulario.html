@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generación de Boletines</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function mostrarCampoTema() {
+            const temaSelect = document.getElementById("tema");
+            const campoOtroTema = document.getElementById("otroTemaContainer");
+            if (temaSelect.value === "otro") {
+                campoOtroTema.classList.remove("hidden");
+            } else {
+                campoOtroTema.classList.add("hidden");
+                document.getElementById("otroTema").value = "";
+            }
+        }
+
+        function validarFormulario(event) {
+            const descripcion = document.getElementById("descripcion").value.trim();
+            if (!descripcion) {
+                alert("La descripción es obligatoria.");
+                event.preventDefault(); // Evita el envío del formulario
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="form-container">
+    <h1>Generación de Boletines</h1>
+    <form action="guardar_boletin.php" method="POST" onsubmit="validarFormulario(event)">
+
+        <label for="tema">Tema del Boletín</label>
+        <select id="tema" name="tema" onchange="mostrarCampoTema()" required>
+            <option value="">Seleccione un tema</option>
+            <option value="sequía">Sequía</option>
+            <option value="plagas">Plagas Agrícolas</option>
+            <option value="cambio_climatico">Cambio Climático</option>
+            <option value="otro">Otro</option>
+        </select>
+
+        <div id="otroTemaContainer" class="hidden">
+            <label for="otroTema">Especifique el Tema</label>
+            <input type="text" id="otroTema" name="otroTema" placeholder="Escriba el tema">
+        </div>
+
+        <label for="prioridad">Prioridad</label>
+        <select id="prioridad" name="prioridad" required>
+            <option value="">Seleccione la prioridad</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+        </select>
+
+        <label for="plazo">Plazo de Entrega</label>
+        <select id="plazo" name="plazo" required>
+            <option value="">Seleccione el plazo</option>
+            <option value="1_mes">Urgente (1 mes)</option>
+            <option value="3_meses">Lo antes posible (3 meses)</option>
+            <option value="6_meses">Sin apuro (6 meses)</option>
+        </select>
+
+        <label for="descripcion">Descripción del Boletín</label>
+        <textarea id="descripcion" name="descripcion" rows="4" placeholder="Describa brevemente el boletín" required></textarea>
+
+        <input type="submit" value="Generar Boletín">
+    </form>
+</div>
+
+</body>
+</html>
