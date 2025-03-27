@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1743026171.06613 "c:/Lettuce/Programming/UTFSM/INF225-Ing-Software/INF225-FIA-GobChile/Hitos-Milestones/H1-26-03-2025/Hito-1.tex" "Hito-1.pdf" "Hito-1" 1743026172.63352 0
+["pdflatex"] 1743028271.59614 "c:/Lettuce/Programming/UTFSM/INF225-Ing-Software/INF225-FIA-GobChile/Hitos-Milestones/H1-26-03-2025/Hito-1.tex" "Hito-1.pdf" "Hito-1" 1743028273.18854 0
   "C:/Users/2001l/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1743022787 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/2001l/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1743015375 12036130 f5d638ad85de99f224b25e1155071cf1 ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmbx12.tfm" 1136765053 1324 c910af8c371558dc20f2d7822f66fe64 ""
@@ -13,9 +13,11 @@
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmsy10.tfm" 1136765053 1124 6c73e740cf17375f03eec0ee63599741 ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmsy6.tfm" 1136765053 1116 933a60c408fc0a863a92debe84b2d294 ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmsy8.tfm" 1136765053 1120 8b7d695260f3cff42e636090a8002094 ""
+  "C:/Users/2001l/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmti12.tfm" 1136765053 1484 ed72f8f5cf654cda15ecc8e32bfcbee5 ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1247596666 32080 340ef9bf63678554ee606688e7b5339d ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1247596667 32722 d7379af29a190c3f453aba36302ff5a9 ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb" 1247596667 32734 69e00a6b65cedb993666e42eedb3d48f ""
+  "C:/Users/2001l/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb" 1247596667 36118 fad905eba93cff5bce1e185fe980a177 ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mkii" 1580390158 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/tex/generic/babel/babel.sty" 1741626476 143717 d1ba057dcb5dbc9ab3e3af1fe908d519 ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/tex/generic/babel/locale/es/babel-es.ini" 1741626477 4345 33a8cc6f0a7c6afcb84895b2c963a4e5 ""
@@ -47,9 +49,9 @@
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/tex/latex/parskip/parskip.sty" 1615976160 4288 94714aa7f535440f33181fec52a31963 ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/tex/latex/setspace/setspace.sty" 1670403145 22490 8cac309b79a4c53a4ffce4b1b07aead0 ""
   "C:/Users/2001l/AppData/Local/Programs/MiKTeX/tex/latex/titlesec/titlesec.sty" 1736608268 48766 87a17a4ef312a39cd43896e34a679a56 ""
-  "Hito-1.aux" 1743026172 335 d9dfa3cca6ed02013e553dcfdfb1fd45 "pdflatex"
-  "Hito-1.tex" 1743026166 1826 a45a5543e356181c4b738733f8c5848a ""
-  "c:/Lettuce/Programming/UTFSM/INF225-Ing-Software/INF225-FIA-GobChile/Hitos-Milestones/H1-26-03-2025/Hito-1.tex" 1743026166 1826 a45a5543e356181c4b738733f8c5848a ""
+  "Hito-1.aux" 1743028272 459 ff5cbdd4ce35a36b1d1cbf6a6ddf8daa "pdflatex"
+  "Hito-1.tex" 1743028269 3543 1a898f637f635887a75753226dc93153 ""
+  "c:/Lettuce/Programming/UTFSM/INF225-Ing-Software/INF225-FIA-GobChile/Hitos-Milestones/H1-26-03-2025/Hito-1.tex" 1743028269 3543 1a898f637f635887a75753226dc93153 ""
   "logo-usm.jpg" 1743022895 72015 64f6b88fd61001747b73eac8ec577b7f ""
   (generated)
   "Hito-1.aux"
