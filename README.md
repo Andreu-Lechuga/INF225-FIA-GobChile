@@ -7,4 +7,4 @@
 - 🛠 Andreu Lechuga Gonzalez / 202073595-6
 
 
-## [Hito 1 Wiki] (https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/Hito-1:-SEMAT)
+## [🚧 Hito 1 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/Hito-1:-SEMAT)
