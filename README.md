@@ -5,3 +5,6 @@
 - 🚀 Pedro Miranda Miranda / 201930556-5
 - 🤝 Aymara Rojas Arellano / 202004665-4
 - 🛠 Andreu Lechuga Gonzalez / 202073595-6
+
+
+## [Hito 1 Wiki] (https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/Hito-1:-SEMAT)
