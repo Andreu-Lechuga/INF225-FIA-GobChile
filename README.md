@@ -8,3 +8,4 @@
 
 ## 📑 Hitos:
 ### [🚧 Hito 1 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/%F0%9F%92%A1-Hito-1:-SEMAT)
+### [🔑 Hito 2 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/Hito-2:-Actualizacion-Levantamiento-de-Proyecto)
