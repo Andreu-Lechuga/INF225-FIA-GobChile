@@ -1,0 +1,207 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+/* Estilos para los botones principales */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 250px;
+  padding: 15px 30px;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(145deg, #34495e, #2c3e50);
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(52, 73, 94, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+  );
+  transition: all 0.6s;
+}
+
+.button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(52, 73, 94, 0.3);
+}
+
+.button:hover:before {
+  left: 100%;
+}
+
+.button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(52, 73, 94, 0.2);
+}
+
+/* Contenedor principal */
+.container {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Estilos para los títulos */
+h1, h2, h3, h4, h5, h6 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 2.5em;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+h2 {
+  font-size: 1.8em;
+}
+
+/* Estilos para los párrafos */
+p {
+  color: #576574;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* Estilos para los formularios */
+form label {
+  display: block;
+  margin: 15px 0 8px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+form input, 
+form select, 
+form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-family: inherit;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus, 
+form select:focus, 
+form textarea:focus {
+  outline: none;
+  border-color: #2c3e50;
+}
+
+form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+form input[type="submit"] {
+  background: linear-gradient(145deg, #34495e, #2c3e50);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 15px;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(52, 73, 94, 0.2);
+}
+
+form input[type="submit"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(52, 73, 94, 0.3);
+}
+
+/* Estilos para las etiquetas */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  min-height: 45px;
+  margin-bottom: 20px;
+}
+
+.tag {
+  background-color: rgba(52, 152, 219, 0.2);
+  border-radius: 16px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1em;
+}
+
+.tag-close {
+  cursor: pointer;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+/* Diseño responsivo */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  .button {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+}
