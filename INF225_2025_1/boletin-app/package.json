@@ -7,14 +7,18 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.9.0",
+    "axios-cache-adapter": "^2.7.3",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.21.2",
     "formik": "^2.2.9",
     "jsonwebtoken": "^9.0.2",
+    "localforage": "^1.10.0",
     "mysql2": "^3.14.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.9",
@@ -25,6 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:unit": "react-scripts test --testPathPattern=src/__tests__/unit",
+    "test:integration": "react-scripts test --testPathPattern=src/__tests__/integration",
+    "test:e2e": "react-scripts test --testPathPattern=src/__tests__/e2e",
     "eject": "react-scripts eject",
     "server": "node server/server.js",
     "dev": "concurrently \"npm run server\" \"npm run start\"",
@@ -49,6 +56,11 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "@testing-library/react-hooks": "^8.0.1",
+    "axios-mock-adapter": "^1.22.0",
+    "concurrently": "^9.1.2",
+    "jest-fetch-mock": "^3.0.3",
+    "msw": "^2.2.3",
+    "nock": "^13.5.4"
   }
 }

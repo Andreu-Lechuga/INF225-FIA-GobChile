@@ -11,6 +11,32 @@ El proyecto está organizado de la siguiente manera:
   - `index.html`: Plantilla HTML principal
   - `manifest.json`: Configuración para PWA
 - `src/`: Código fuente del frontend
+  - `__tests__/`: Pruebas automatizadas
+    - `unit/`: Pruebas unitarias
+      - `hooks/`: Pruebas de hooks personalizados
+        - `useApi.test.js`: Pruebas para el hook de API
+      - `components/`: Pruebas de componentes
+      - `utils/`: Pruebas de utilidades
+    - `integration/`: Pruebas de integración
+      - `api/`: Pruebas de integración de servicios API
+        - `apiService1.test.js`: Pruebas del servicio API principal
+        - `newsCatcherService.test.js`: Pruebas del servicio de noticias
+    - `e2e/`: Pruebas end-to-end
+      - `flows/`: Flujos completos de usuario
+        - `resourceFlow.test.js`: Prueba del flujo completo de recursos
+  - `api/`: Configuración y servicios de API
+    - `config/`: Configuraciones de API
+      - `apiConfig.js`: Configuración general de APIs
+      - `axios.js`: Configuración de instancia Axios
+    - `hooks/`: Hooks personalizados para API
+      - `useApi.js`: Hook genérico para llamadas a API
+      - `useNewsCatcher.js`: Hook específico para API de noticias
+    - `interceptors/`: Interceptores de Axios
+      - `authInterceptor.js`: Interceptor para autenticación
+      - `errorInterceptor.js`: Interceptor para manejo de errores
+    - `services/`: Servicios de API
+      - `apiService1.js`: Servicio principal de API
+      - `newsCatcherService.js`: Servicio para API de noticias
   - `assets/`: Recursos como estilos e imágenes
     - `styles/`: Hojas de estilo CSS
       - `index.css`: Estilos globales
@@ -31,6 +57,8 @@ El proyecto está organizado de la siguiente manera:
     - `BoletinForm/`: Formulario para crear boletines
     - `BoletinList/`: Lista de boletines
     - `BoletinStatus/`: Estado de los boletines
+  - `utils/`: Utilidades y funciones auxiliares
+    - `apiUtils.js`: Utilidades para manejo de API (caché, reintentos, etc.)
   - `App.js`: Componente principal con rutas y protección de rutas
   - `index.js`: Punto de entrada de la aplicación
   - `reportWebVitals.js`: Medición de rendimiento
@@ -59,6 +87,9 @@ El proyecto está organizado de la siguiente manera:
 - **Formik**: Para manejo de formularios
 - **Yup**: Para validación de formularios
 - **Axios**: Para peticiones HTTP
+- **Jest**: Framework de pruebas
+- **React Testing Library**: Utilidades para pruebas de componentes React
+- **Axios Mock Adapter**: Para simular respuestas de API en pruebas
 
 ### Backend
 - **Node.js**: Entorno de ejecución para JavaScript
