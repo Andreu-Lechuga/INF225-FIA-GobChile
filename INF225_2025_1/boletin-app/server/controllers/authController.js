@@ -35,10 +35,20 @@ const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     
-    // Insertar nuevo usuario (rol por defecto: usuario_publico = 3)
+    // Obtener el rol del usuario (si no se proporciona, usar usuario_publico = 3 por defecto)
+    const roleMap = {
+      'administrador': 1,
+      'usuario-privado': 2,
+      'usuario-publico': 3
+    };
+    
+    const role = req.body.role || 'usuario-publico';
+    const roleId = roleMap[role] || 3;
+    
+    // Insertar nuevo usuario con el rol especificado
     const [result] = await connection.query(
       'INSERT INTO users (username, email, password, role_id) VALUES (?, ?, ?, ?)',
-      [username, email, hashedPassword, 3]
+      [username, email, hashedPassword, roleId]
     );
     
     // Obtener el usuario recién creado

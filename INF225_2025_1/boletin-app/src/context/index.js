@@ -113,14 +113,22 @@ export const AuthProvider = ({ children }) => {
         throw new Error('El nombre de usuario o correo electrónico ya está en uso.');
       }
       
-      // Crear nuevo usuario
+      // Crear nuevo usuario con el rol seleccionado
+      const roleMap = {
+        'administrador': 1,
+        'usuario-privado': 2,
+        'usuario-publico': 3
+      };
+      
+      const roleId = roleMap[userData.role] || 3; // Si no hay rol o es inválido, usar usuario público
+      
       const newUser = {
         id: users.length + 1,
         username: userData.username,
         email: userData.email,
         password: userData.password, // En una app real, esto debería estar hasheado
-        role_id: 3, // Usuario público por defecto
-        role: 'usuario_publico'
+        role_id: roleId,
+        role: userData.role
       };
       
       // Actualizar lista de usuarios

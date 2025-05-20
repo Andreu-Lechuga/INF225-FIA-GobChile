@@ -59,6 +59,22 @@ const Input = styled(Field)`
   }
 `;
 
+const Select = styled(Field)`
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-family: inherit;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+  background-color: white;
+  
+  &:focus {
+    outline: none;
+    border-color: #2c3e50;
+  }
+`;
+
 const ErrorText = styled.div`
   color: #e74c3c;
   font-size: 0.9em;
@@ -129,7 +145,10 @@ const SignUpSchema = Yup.object().shape({
     .min(6, 'La contraseña debe tener al menos 6 caracteres'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir')
-    .required('Confirmar contraseña es obligatorio')
+    .required('Confirmar contraseña es obligatorio'),
+  role: Yup.string()
+    .required('El rol es obligatorio')
+    .oneOf(['administrador', 'usuario-privado', 'usuario-publico'], 'Rol inválido')
 });
 
 const SignUp = () => {
@@ -167,7 +186,8 @@ const SignUp = () => {
             username: '', 
             email: '', 
             password: '', 
-            confirmPassword: '' 
+            confirmPassword: '',
+            role: 'usuario-publico' // Valor por defecto
           }}
           validationSchema={SignUpSchema}
           onSubmit={handleSubmit}
@@ -216,6 +236,20 @@ const SignUp = () => {
                   placeholder="Confirme su contraseña" 
                 />
                 <ErrorMessage name="confirmPassword" component={ErrorText} />
+              </FormGroup>
+              
+              <FormGroup>
+                <Label htmlFor="role">Rol de Usuario</Label>
+                <Select 
+                  as="select" 
+                  id="role" 
+                  name="role"
+                >
+                  <option value="administrador">Administrador</option>
+                  <option value="usuario-privado">Usuario Privado</option>
+                  <option value="usuario-publico">Usuario Público</option>
+                </Select>
+                <ErrorMessage name="role" component={ErrorText} />
               </FormGroup>
               
               <SubmitButton type="submit" disabled={isSubmitting}>
