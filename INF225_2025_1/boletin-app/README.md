@@ -232,9 +232,131 @@ Para desplegar en producción, necesitarás configurar un servidor web para serv
 - `POST /api/auth/login`: Inicio de sesión
 - `GET /api/auth/profile`: Obtener perfil del usuario autenticado
 
-### Boletines (pendientes de implementar)
+### Boletines
 - `GET /api/boletines`: Obtener todos los boletines
+- `GET /api/boletines/estado`: Obtener el estado de todos los boletines
 - `GET /api/boletines/:id`: Obtener un boletín específico
 - `POST /api/boletines`: Crear un nuevo boletín
 - `PUT /api/boletines/:id`: Actualizar un boletín
 - `DELETE /api/boletines/:id`: Eliminar un boletín
+
+## Implementación de la Base de Datos
+
+La aplicación utiliza MySQL como sistema de gestión de base de datos. A continuación, se detalla la implementación:
+
+### Estructura de la Base de Datos
+
+La base de datos `boletines_db` contiene las siguientes tablas:
+
+1. **roles**: Almacena los roles de usuario
+   - `id`: Identificador único (clave primaria)
+   - `name`: Nombre del rol (administrador, usuario-privado, usuario-publico)
+   - `description`: Descripción del rol
+   - `created_at`: Fecha de creación
+
+2. **users**: Almacena la información de los usuarios
+   - `id`: Identificador único (clave primaria)
+   - `username`: Nombre de usuario (único)
+   - `email`: Correo electrónico (único)
+   - `password`: Contraseña encriptada
+   - `role_id`: Referencia al rol del usuario (clave foránea)
+   - `created_at`: Fecha de creación
+
+3. **boletines**: Almacena la información de los boletines
+   - `id`: Identificador único (clave primaria)
+   - `titulo`: Título del boletín
+   - `temas`: Temas de interés (almacenado como JSON)
+   - `plazo`: Plazo del boletín
+   - `comentarios`: Comentarios adicionales
+   - `estado`: Estado del boletín (Registrado, En proceso, Completado)
+   - `fecha_registro`: Fecha de registro
+   - `resultados_api`: Resultados de la API (almacenado como JSON)
+
+### Modelo de Datos
+
+La aplicación utiliza un enfoque de acceso a datos basado en mysql2, implementando un patrón de repositorio para las operaciones CRUD:
+
+- **Boletin.js**: Modelo que proporciona métodos para:
+  - `findAll()`: Obtener todos los boletines
+  - `findByPk(id)`: Obtener un boletín por ID
+  - `create(data)`: Crear un nuevo boletín
+  - `update(id, data)`: Actualizar un boletín existente
+  - `destroy(id)`: Eliminar un boletín
+  - `diasTranscurridos(fecha)`: Calcular días transcurridos desde la fecha de registro
+
+### Configuración de la Base de Datos
+
+La configuración de la conexión a la base de datos se realiza a través de variables de entorno:
+
+```javascript
+// server/config/db.js
+const pool = mysql.createPool({
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASS || '',
+  database: process.env.DB_NAME || 'boletines_db',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
+```
+
+### Inicialización de la Base de Datos
+
+El script `server/db/init.js` se encarga de:
+1. Crear la base de datos si no existe
+2. Crear las tablas necesarias
+3. Insertar roles predeterminados
+4. Crear un usuario administrador por defecto
+
+## Configuración de la Base de Datos
+
+Para configurar correctamente la base de datos, sigue estos pasos:
+
+1. **Instala MySQL**:
+   - Descarga e instala MySQL Server desde [https://dev.mysql.com/downloads/mysql/](https://dev.mysql.com/downloads/mysql/)
+   - Asegúrate de recordar la contraseña del usuario root durante la instalación
+
+2. **Inicia el servicio MySQL**:
+   - En Windows: Abre el Administrador de servicios y asegúrate de que el servicio "MySQL" esté en ejecución
+   - En macOS: `brew services start mysql` o `sudo mysql.server start`
+   - En Linux: `sudo systemctl start mysql`
+
+3. **Configura el archivo .env**:
+   - Asegúrate de que las siguientes variables estén correctamente configuradas:
+   ```
+   DB_HOST=localhost
+   DB_USER=root       # O el usuario que hayas creado
+   DB_PASS=           # La contraseña de tu usuario MySQL
+   DB_NAME=boletines_db
+   DB_PORT=3306       # Puerto por defecto de MySQL
+   ```
+
+4. **Inicializa la base de datos**:
+   ```bash
+   # En Windows (PowerShell)
+   cd INF225_2025_1/boletin-app
+   npm run init-db
+   
+   # En macOS/Linux
+   cd INF225_2025_1/boletin-app && npm run init-db
+   ```
+
+5. **Verifica la conexión**:
+   - Inicia el servidor con `npm run server`
+   - Deberías ver el mensaje "Conexión a la base de datos MySQL establecida correctamente"
+
+### Solución de Problemas Comunes
+
+- **Error "ECONNREFUSED"**: Indica que no se puede conectar al servidor MySQL
+  - Verifica que MySQL esté instalado y en ejecución
+  - Comprueba que el puerto 3306 esté abierto y no bloqueado por un firewall
+  - Asegúrate de que las credenciales en el archivo .env sean correctas
+
+- **Error "ER_ACCESS_DENIED_ERROR"**: Problema con las credenciales
+  - Verifica el usuario y contraseña en el archivo .env
+  - Asegúrate de que el usuario tenga permisos para acceder a la base de datos
+
+- **Error "ER_BAD_DB_ERROR"**: La base de datos no existe
+  - Ejecuta el script de inicialización `npm run init-db`
+  - Verifica que el nombre de la base de datos en .env sea correcto

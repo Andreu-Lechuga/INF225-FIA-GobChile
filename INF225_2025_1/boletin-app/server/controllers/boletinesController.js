@@ -11,7 +11,7 @@ const boletinesController = {
       const formattedBoletines = boletines.map(boletin => ({
         id: boletin.id,
         titulo: boletin.titulo,
-        temas: boletin.temas,
+        temas: typeof boletin.temas === 'string' ? JSON.parse(boletin.temas) : boletin.temas,
         fecha: new Date(boletin.fecha_registro).toLocaleDateString('es-ES'),
         estado: boletin.estado
       }));
@@ -37,9 +37,9 @@ const boletinesController = {
       const estadoBoletines = boletines.map(boletin => ({
         id: boletin.id,
         titulo: boletin.titulo,
-        temas: boletin.temas,
+        temas: typeof boletin.temas === 'string' ? JSON.parse(boletin.temas) : boletin.temas,
         fecha_registro: new Date(boletin.fecha_registro).toLocaleDateString('es-ES'),
-        dias_transcurridos: boletin.diasTranscurridos(),
+        dias_transcurridos: Boletin.diasTranscurridos(boletin.fecha_registro),
         estado: boletin.estado
       }));
       
@@ -69,6 +69,16 @@ const boletinesController = {
         });
       }
       
+      // Parsear el campo temas si es una cadena JSON
+      if (boletin.temas && typeof boletin.temas === 'string') {
+        boletin.temas = JSON.parse(boletin.temas);
+      }
+      
+      // Parsear el campo resultados_api si es una cadena JSON
+      if (boletin.resultados_api && typeof boletin.resultados_api === 'string') {
+        boletin.resultados_api = JSON.parse(boletin.resultados_api);
+      }
+      
       res.json({
         status: 'success',
         data: boletin
@@ -85,10 +95,10 @@ const boletinesController = {
   // Crear un nuevo boletín
   createBoletin: async (req, res) => {
     try {
-      const { titulo, temas, plazo, indicaciones } = req.body;
+      const { titulo, temas, plazo, comentarios } = req.body;
       
       // Validaciones
-      if (!titulo || !temas || !plazo || !indicaciones) {
+      if (!titulo || !temas || !plazo || !comentarios) {
         return res.status(400).json({
           status: 'error',
           message: 'Todos los campos son obligatorios'
@@ -100,7 +110,7 @@ const boletinesController = {
         titulo,
         temas,
         plazo,
-        indicaciones,
+        comentarios,
         estado: 'Registrado'
       });
       
@@ -122,7 +132,7 @@ const boletinesController = {
   updateBoletin: async (req, res) => {
     try {
       const { id } = req.params;
-      const { titulo, temas, plazo, indicaciones, estado } = req.body;
+      const { titulo, temas, plazo, comentarios, estado } = req.body;
       
       const boletin = await Boletin.findByPk(id);
       
@@ -134,18 +144,18 @@ const boletinesController = {
       }
       
       // Actualizar boletín
-      if (titulo) boletin.titulo = titulo;
-      if (temas) boletin.temas = temas;
-      if (plazo) boletin.plazo = plazo;
-      if (indicaciones) boletin.indicaciones = indicaciones;
-      if (estado) boletin.estado = estado;
-      
-      await boletin.save();
+      const updatedBoletin = await Boletin.update(id, {
+        titulo,
+        temas,
+        plazo,
+        comentarios,
+        estado
+      });
       
       res.json({
         status: 'success',
         message: 'Boletín actualizado correctamente',
-        data: boletin
+        data: updatedBoletin
       });
     } catch (error) {
       res.status(500).json({
@@ -169,7 +179,7 @@ const boletinesController = {
         });
       }
       
-      await boletin.destroy();
+      await Boletin.destroy(id);
       
       res.json({
         status: 'success',

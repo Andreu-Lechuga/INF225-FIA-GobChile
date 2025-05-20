@@ -8,15 +8,16 @@ CREATE TABLE IF NOT EXISTS boletines (
     titulo VARCHAR(50) NOT NULL,
     temas JSON NOT NULL,
     plazo VARCHAR(10) NOT NULL,
-    indicaciones VARCHAR(200) NOT NULL,
+    comentarios VARCHAR(200) NOT NULL,
     estado VARCHAR(30) NOT NULL DEFAULT 'Registrado',
     fecha_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    resultados_api JSON DEFAULT NULL COMMENT 'Almacena hasta 50 bloques de resultados de la API, cada bloque contiene [título, descripción, url]',
     CONSTRAINT chk_estado CHECK (estado IN ('Registrado', 'En proceso', 'Completado')),
     CONSTRAINT chk_plazo CHECK (plazo IN ('1_mes', '3_meses', '6_meses', '1_año', '2_años', '3_años', '4_años', '5_años', '10_años'))
 );
 
 -- Insertar datos de ejemplo
-INSERT INTO boletines (titulo, temas, plazo, indicaciones, estado, fecha_registro) VALUES
+INSERT INTO boletines (titulo, temas, plazo, comentarios, estado, fecha_registro) VALUES
 ('Mejores prácticas para el cultivo en condiciones de sequía', 
  '["sequía", "cultivo", "agricultura sostenible"]', 
  '1_año', 
@@ -51,3 +52,26 @@ INSERT INTO boletines (titulo, temas, plazo, indicaciones, estado, fecha_registr
  'Evaluar proyecciones climáticas y su impacto en diferentes tipos de cultivos', 
  'Registrado', 
  '2025-03-25');
+
+-- Ejemplo de cómo se vería un registro con resultados_api
+/*
+UPDATE boletines 
+SET resultados_api = JSON_ARRAY(
+  JSON_ARRAY(
+    'Nuevas técnicas de cultivo en condiciones de sequía', 
+    'Investigadores desarrollan métodos innovadores para optimizar el uso del agua en cultivos de secano', 
+    'https://ejemplo.com/articulo1'
+  ),
+  JSON_ARRAY(
+    'Estudio revela efectividad de cultivos resistentes a la sequía', 
+    'Un estudio de 5 años muestra que las variedades modificadas pueden aumentar el rendimiento hasta un 40% en condiciones de escasez hídrica', 
+    'https://ejemplo.com/articulo2'
+  ),
+  JSON_ARRAY(
+    'Sistemas de riego por goteo reducen consumo de agua en un 60%', 
+    'Agricultores de la región central reportan importantes ahorros tras implementar tecnologías de riego eficiente', 
+    'https://ejemplo.com/articulo3'
+  )
+)
+WHERE id = 1;
+*/

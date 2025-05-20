@@ -6,6 +6,10 @@ const initDatabase = async () => {
   try {
     const connection = await pool.getConnection();
     
+    // Crear base de datos si no existe
+    await connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME || 'boletines_db'}`);
+    await connection.query(`USE ${process.env.DB_NAME || 'boletines_db'}`);
+    
     // Crear tabla de roles si no existe
     await connection.query(`
       CREATE TABLE IF NOT EXISTS roles (
@@ -29,16 +33,32 @@ const initDatabase = async () => {
       )
     `);
     
+    // Crear tabla de boletines si no existe
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS boletines (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        titulo VARCHAR(50) NOT NULL,
+        temas JSON NOT NULL,
+        plazo VARCHAR(10) NOT NULL,
+        comentarios VARCHAR(200) NOT NULL,
+        estado VARCHAR(30) NOT NULL DEFAULT 'Registrado',
+        fecha_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        resultados_api JSON DEFAULT NULL COMMENT 'Almacena hasta 50 bloques de resultados de la API, cada bloque contiene [título, descripción, url]',
+        CONSTRAINT chk_estado CHECK (estado IN ('Registrado', 'En proceso', 'Completado')),
+        CONSTRAINT chk_plazo CHECK (plazo IN ('1_mes', '3_meses', '6_meses', '1_año', '2_años', '3_años', '4_años', '5_años', '10_años'))
+      )
+    `);
+    
     // Verificar si ya existen roles
     const [roles] = await connection.query('SELECT * FROM roles');
     
-    // Si no hay roles, insertar los roles predeterminados
+    // Si no hay roles, insertar los roles actualizados
     if (roles.length === 0) {
       await connection.query(`
         INSERT INTO roles (id, name, description) VALUES 
-        (1, 'jefe', 'Acceso completo al sistema'),
-        (2, 'empleado', 'Acceso a funciones operativas'),
-        (3, 'usuario_publico', 'Acceso limitado a información pública')
+        (1, 'administrador', 'Acceso completo al sistema'),
+        (2, 'usuario-privado', 'Acceso a funciones operativas'),
+        (3, 'usuario-publico', 'Acceso limitado a información pública')
       `);
       console.log('Roles predeterminados creados');
     }

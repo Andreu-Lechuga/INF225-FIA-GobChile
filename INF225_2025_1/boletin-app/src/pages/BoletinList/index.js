@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 // Estilos para la página de lista de boletines
 const ListContainer = styled.div`
@@ -98,62 +99,24 @@ const ReturnButton = styled(Link)`
   }
 `;
 
-// Datos de ejemplo para mostrar
-const boletinesEjemplo = [
-  {
-    id: 1,
-    titulo: 'Mejores prácticas para el cultivo en condiciones de sequía',
-    temas: ['sequía', 'cultivo', 'agricultura sostenible'],
-    fecha: '15/04/2025',
-    estado: 'Completado'
-  },
-  {
-    id: 2,
-    titulo: 'Control de plagas en campos de trigo',
-    temas: ['plagas', 'trigo', 'control biológico'],
-    fecha: '10/04/2025',
-    estado: 'Completado'
-  },
-  {
-    id: 3,
-    titulo: 'Estrategias de riego en tiempos de escasez hídrica',
-    temas: ['riego', 'escasez hídrica', 'optimización'],
-    fecha: '05/04/2025',
-    estado: 'Completado'
-  },
-  {
-    id: 4,
-    titulo: 'Innovaciones en el manejo de cultivos resistentes a plagas',
-    temas: ['innovación', 'resistencia', 'cultivos'],
-    fecha: '01/04/2025',
-    estado: 'Completado'
-  },
-  {
-    id: 5,
-    titulo: 'Impacto del cambio climático en la agricultura a largo plazo',
-    temas: ['cambio climático', 'agricultura', 'proyección'],
-    fecha: '25/03/2025',
-    estado: 'Completado'
-  }
-];
 
 const BoletinList = () => {
   const [boletines, setBoletines] = useState([]);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    // Simulación de carga de datos desde el backend
+    // Carga de datos desde el backend
     const fetchBoletines = async () => {
       try {
-        // Aquí se haría la petición al backend
-        // const response = await fetch('/api/boletines');
-        // const data = await response.json();
+        const response = await axios.get('/api/boletines');
         
-        // Usando datos de ejemplo por ahora
-        setTimeout(() => {
-          setBoletines(boletinesEjemplo);
-          setLoading(false);
-        }, 1000);
+        if (response.data && response.data.status === 'success') {
+          setBoletines(response.data.data);
+        } else {
+          throw new Error('Formato de respuesta inválido');
+        }
+        
+        setLoading(false);
       } catch (error) {
         console.error('Error al cargar los boletines:', error);
         setLoading(false);
@@ -186,7 +149,7 @@ const BoletinList = () => {
             </BoletinItem>
           ))
         ) : (
-          <EmptyMessage>No hay boletines generados aún.</EmptyMessage>
+          <EmptyMessage>Ningún boletín creado todavía</EmptyMessage>
         )}
       </Container>
       

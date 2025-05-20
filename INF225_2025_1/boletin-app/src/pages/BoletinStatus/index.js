@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 // Estilos para la página de estado de boletines
 const StatusContainer = styled.div`
@@ -81,6 +82,13 @@ const ErrorMessage = styled.p`
   padding: 20px 0;
 `;
 
+const EmptyMessage = styled.p`
+  text-align: center;
+  color: #7f8c8d;
+  font-style: italic;
+  padding: 20px 0;
+`;
+
 const NavFooter = styled.div`
   text-align: center;
   margin-top: 20px;
@@ -109,57 +117,6 @@ const ReturnButton = styled(Link)`
   }
 `;
 
-// Datos de ejemplo para mostrar
-const estadoBoletinesEjemplo = [
-  {
-    id: 1,
-    titulo: 'Mejores prácticas para el cultivo en condiciones de sequía',
-    temas: ['sequía', 'cultivo', 'agricultura sostenible'],
-    fecha_registro: '15/04/2025',
-    dias_transcurridos: 8,
-    estado: 'Completado'
-  },
-  {
-    id: 2,
-    titulo: 'Control de plagas en campos de trigo',
-    temas: ['plagas', 'trigo', 'control biológico'],
-    fecha_registro: '10/04/2025',
-    dias_transcurridos: 13,
-    estado: 'Completado'
-  },
-  {
-    id: 3,
-    titulo: 'Estrategias de riego en tiempos de escasez hídrica',
-    temas: ['riego', 'escasez hídrica', 'optimización'],
-    fecha_registro: '05/04/2025',
-    dias_transcurridos: 18,
-    estado: 'Completado'
-  },
-  {
-    id: 4,
-    titulo: 'Innovaciones en el manejo de cultivos resistentes a plagas',
-    temas: ['innovación', 'resistencia', 'cultivos'],
-    fecha_registro: '01/04/2025',
-    dias_transcurridos: 22,
-    estado: 'En proceso'
-  },
-  {
-    id: 5,
-    titulo: 'Impacto del cambio climático en la agricultura a largo plazo',
-    temas: ['cambio climático', 'agricultura', 'proyección'],
-    fecha_registro: '25/03/2025',
-    dias_transcurridos: 29,
-    estado: 'Registrado'
-  },
-  {
-    id: 6,
-    titulo: 'Análisis de suelos para cultivos orgánicos',
-    temas: ['suelos', 'cultivos orgánicos', 'análisis'],
-    fecha_registro: '20/04/2025',
-    dias_transcurridos: 3,
-    estado: 'Registrado'
-  }
-];
 
 const BoletinStatus = () => {
   const [estadoBoletines, setEstadoBoletines] = useState([]);
@@ -167,18 +124,18 @@ const BoletinStatus = () => {
   const [error, setError] = useState(null);
   
   useEffect(() => {
-    // Simulación de carga de datos desde el backend
+    // Carga de datos desde el backend
     const fetchEstadoBoletines = async () => {
       try {
-        // Aquí se haría la petición al backend
-        // const response = await fetch('/api/estado-boletines');
-        // const data = await response.json();
+        const response = await axios.get('/api/boletines/estado');
         
-        // Usando datos de ejemplo por ahora
-        setTimeout(() => {
-          setEstadoBoletines(estadoBoletinesEjemplo);
-          setLoading(false);
-        }, 1000);
+        if (response.data && response.data.status === 'success') {
+          setEstadoBoletines(response.data.data);
+        } else {
+          throw new Error('Formato de respuesta inválido');
+        }
+        
+        setLoading(false);
       } catch (error) {
         console.error('Error al cargar el estado de los boletines:', error);
         setError('Error al cargar los datos. Por favor, intente nuevamente.');
@@ -198,7 +155,7 @@ const BoletinStatus = () => {
           <LoadingMessage>Cargando datos...</LoadingMessage>
         ) : error ? (
           <ErrorMessage>{error}</ErrorMessage>
-        ) : (
+        ) : estadoBoletines.length > 0 ? (
           <Table>
             <thead>
               <Tr>
@@ -229,6 +186,8 @@ const BoletinStatus = () => {
               ))}
             </tbody>
           </Table>
+        ) : (
+          <EmptyMessage>Ningún boletín creado todavía</EmptyMessage>
         )}
       </Container>
       

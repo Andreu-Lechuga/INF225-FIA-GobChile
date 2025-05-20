@@ -11,8 +11,8 @@ export const API_CONFIG = {
     DEFAULT_PARAMS: {
       // Parámetros por defecto para Newscatcher API
       lang: 'es',
-      countries: 'CL',
-      page_size: 10
+      countries: 'CL,ES,MX,AR,CO,PE',  // Incluir más países hispanohablantes
+      page_size: 20
     }
   }
 };

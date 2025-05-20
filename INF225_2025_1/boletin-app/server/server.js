@@ -3,6 +3,7 @@ const cors = require('cors');
 const { testConnection } = require('./config/db');
 const { initDatabase } = require('./db/init');
 const authRoutes = require('./routes/authRoutes');
+const boletinRoutes = require('./routes/boletinRoutes');
 
 // Crear la aplicación Express
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true })); // Parsear solicitudes URL-enco
 
 // Rutas
 app.use('/api/auth', authRoutes);
+app.use('/api/boletines', boletinRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {
