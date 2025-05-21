@@ -9,12 +9,21 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || '',
-  database: process.env.DB_NAME || 'boletines_db',
+  password: process.env.DB_PASS || 'password-mysql',
+  // No especificar la base de datos aquí para poder crearla primero
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
+
+// Función para obtener una conexión a una base de datos específica
+const getConnection = async (database) => {
+  const connection = await pool.getConnection();
+  if (database) {
+    await connection.query(`USE ${database}`);
+  }
+  return connection;
+};
 
 // Función para probar la conexión a la base de datos
 const testConnection = async () => {
@@ -31,5 +40,6 @@ const testConnection = async () => {
 
 module.exports = {
   pool,
-  testConnection
+  testConnection,
+  getConnection
 };

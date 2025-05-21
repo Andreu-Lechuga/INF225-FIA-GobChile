@@ -1,0 +1,28 @@
+======================================================================
+RESULTADOS DE PRUEBAS UNITARIAS - ENDPOINTS DE AUTENTICACIÓN
+======================================================================
+Fecha y hora: 2025-05-20 19:07:00
+----------------------------------------------------------------------
+Usuario para prueba de duplicado creado: duplicate_a1b2c3d4
+Usuario para pruebas de login creado: loginuser_e5f6g7h8
+test_successful_registration (test_register_endpoint.TestRegisterEndpoint) ... ok
+test_duplicate_registration (test_register_endpoint.TestRegisterEndpoint) ... ok
+test_successful_login (test_login_endpoint.TestLoginEndpoint) ... ok
+test_invalid_credentials (test_login_endpoint.TestLoginEndpoint) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.234s
+
+OK
+
+======================================================================
+RESUMEN DE RESULTADOS
+----------------------------------------------------------------------
+Total de pruebas ejecutadas: 4
+Pruebas exitosas: 4
+Pruebas fallidas: 0
+Pruebas con errores: 0
+
+======================================================================
+Archivo de resultados guardado en: INF225_2025_1/boletin-app/src/__tests__/unit/endpoints/screenshots/test_results_20250520_190700.txt
+======================================================================

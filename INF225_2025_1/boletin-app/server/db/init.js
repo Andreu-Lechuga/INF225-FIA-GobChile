@@ -1,14 +1,20 @@
-const { pool } = require('../config/db');
+const { pool, getConnection } = require('../config/db');
 const bcrypt = require('bcrypt');
 
 // Función para inicializar la base de datos
 const initDatabase = async () => {
   try {
+    // Obtener conexión sin especificar base de datos
     const connection = await pool.getConnection();
     
     // Crear base de datos si no existe
-    await connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME || 'boletines_db'}`);
-    await connection.query(`USE ${process.env.DB_NAME || 'boletines_db'}`);
+    const dbName = process.env.DB_NAME || 'boletines_db';
+    console.log(`Creando base de datos ${dbName} si no existe...`);
+    await connection.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`);
+    
+    // Usar la base de datos
+    console.log(`Usando base de datos ${dbName}...`);
+    await connection.query(`USE ${dbName}`);
     
     // Crear tabla de roles si no existe
     await connection.query(`

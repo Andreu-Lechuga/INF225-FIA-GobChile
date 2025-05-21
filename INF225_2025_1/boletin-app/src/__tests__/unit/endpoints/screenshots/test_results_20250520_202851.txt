@@ -1,0 +1,31 @@
+======================================================================
+RESULTADOS DE PRUEBAS UNITARIAS - ENDPOINTS DE AUTENTICACIÓN
+======================================================================
+Fecha y hora: 2025-05-20 20:28:51
+----------------------------------------------------------------------
+Usuario para prueba de duplicado creado: testuser_am2fi4dx
+Finalizando pruebas de registro de usuarios
+Usuario para pruebas de login creado: loginuser_xdcw8oe0
+Finalizando pruebas de inicio de sesión
+
+======================================================================
+RESUMEN DE RESULTADOS
+----------------------------------------------------------------------
+Total de pruebas ejecutadas: 4
+Pruebas exitosas: 3
+Pruebas fallidas: 1
+Pruebas con errores: 0
+
+DETALLE DE FALLOS:
+
+1. test_successful_registration (test_register_endpoint.TestRegisterEndpoint.test_successful_registration)
+--------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Lettuce\Programming\UTFSM\INF225-Ing-Software\INF225-FIA-GobChile\INF225_2025_1\boletin-app\src\__tests__\unit\endpoints\test_register_endpoint.py", line 75, in test_successful_registration
+    self.assertEqual(response.status_code, 201,
+AssertionError: 400 != 201 : Se esperaba código 201, se obtuvo 400
+
+
+======================================================================
+Archivo de resultados guardado en: C:\Lettuce\Programming\UTFSM\INF225-Ing-Software\INF225-FIA-GobChile\INF225_2025_1\boletin-app\src\__tests__\unit\endpoints\screenshots\test_results_20250520_202851.txt
+======================================================================
