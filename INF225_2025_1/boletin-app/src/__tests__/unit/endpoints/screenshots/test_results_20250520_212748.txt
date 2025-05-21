@@ -1,0 +1,46 @@
+======================================================================
+RESULTADOS DE PRUEBAS UNITARIAS - ENDPOINTS DE AUTENTICACIÓN
+======================================================================
+Fecha y hora: 2025-05-20 21:27:48
+----------------------------------------------------------------------
+Finalizando pruebas de registro de usuarios
+Usuario para pruebas de login creado: loginuser_c25tg3wr
+Finalizando pruebas de inicio de sesión
+
+======================================================================
+RESUMEN DE RESULTADOS
+----------------------------------------------------------------------
+Total de pruebas ejecutadas: 6
+Pruebas exitosas: 3
+Pruebas fallidas: 3
+Pruebas con errores: 0
+
+DETALLE DE FALLOS:
+
+1. test_invalid_username_registration (test_register_endpoint.TestRegisterEndpoint.test_invalid_username_registration)
+--------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Lettuce\Programming\UTFSM\INF225-Ing-Software\INF225-FIA-GobChile\INF225_2025_1\boletin-app\src\__tests__\unit\endpoints\test_register_endpoint.py", line 123, in test_invalid_username_registration
+    self.assertEqual(response.status_code, 201,
+AssertionError: 400 != 201 : Se esperaba código 201, se obtuvo 400
+
+
+2. test_password_length_boundary (test_register_endpoint.TestRegisterEndpoint.test_password_length_boundary)
+--------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Lettuce\Programming\UTFSM\INF225-Ing-Software\INF225-FIA-GobChile\INF225_2025_1\boletin-app\src\__tests__\unit\endpoints\test_register_endpoint.py", line 161, in test_password_length_boundary
+    self.assertEqual(response_invalid.status_code, 201,
+AssertionError: 400 != 201 : Se esperaba código 201, se obtuvo 400
+
+
+3. test_empty_or_whitespace_inputs (test_login_endpoint.TestLoginEndpoint.test_empty_or_whitespace_inputs)
+--------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Lettuce\Programming\UTFSM\INF225-Ing-Software\INF225-FIA-GobChile\INF225_2025_1\boletin-app\src\__tests__\unit\endpoints\test_login_endpoint.py", line 186, in test_empty_or_whitespace_inputs
+    self.assertEqual(response_whitespace_username.status_code, 401,
+AssertionError: 400 != 401 : Se esperaba código 401, se obtuvo 400
+
+
+======================================================================
+Archivo de resultados guardado en: C:\Lettuce\Programming\UTFSM\INF225-Ing-Software\INF225-FIA-GobChile\INF225_2025_1\boletin-app\src\__tests__\unit\endpoints\screenshots\test_results_20250520_212748.txt
+======================================================================

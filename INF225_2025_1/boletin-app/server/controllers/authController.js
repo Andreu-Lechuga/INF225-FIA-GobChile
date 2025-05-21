@@ -15,6 +15,39 @@ const register = async (req, res) => {
       });
     }
     
+    // Validar que el nombre de usuario no contenga caracteres especiales
+    const usernameRegex = /^[a-zA-Z0-9_-]+$/;
+    if (!usernameRegex.test(username)) {
+      return res.status(400).json({
+        success: false,
+        message: 'El nombre de usuario contiene caracteres inválidos. Solo se permiten letras, números, guiones y guiones bajos.'
+      });
+    }
+    
+    // Validar que el nombre de usuario y la contraseña no sean solo espacios en blanco
+    if (username.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: 'El nombre de usuario no puede estar vacío o contener solo espacios.'
+      });
+    }
+    
+    // Validar longitud mínima de la contraseña (6 caracteres)
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'La contraseña debe tener al menos 6 caracteres.'
+      });
+    }
+    
+    // Validar que la contraseña no sea solo espacios en blanco
+    if (password.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: 'La contraseña no puede contener solo espacios.'
+      });
+    }
+    
     const connection = await pool.getConnection();
     
     // Verificar si el usuario ya existe
@@ -90,6 +123,21 @@ const login = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Por favor, proporcione el nombre de usuario y la contraseña.'
+      });
+    }
+    
+    // Validar que el nombre de usuario y la contraseña no sean solo espacios en blanco
+    if (username.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: 'El nombre de usuario no puede estar vacío o contener solo espacios.'
+      });
+    }
+    
+    if (password.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: 'La contraseña no puede contener solo espacios.'
       });
     }
     
