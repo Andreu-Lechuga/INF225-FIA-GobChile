@@ -10,4 +10,4 @@
 ### [🚧 Hito 1 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/%F0%9F%92%A1-Hito-1:-SEMAT)
 ### [🔑 Hito 2 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/%F0%9F%94%8D-Hito-2:-Actualizaci%C3%B3n-Levantamiento-de-Proyecto)
 ### [🎫 Hito 3 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/%F0%9F%94%92-Hito-3:-Validaci%C3%B3n-de-Datos-Recolectados-mediante-API-de-Scraping)
-### [Hito 4](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/04.%F0%9F%93%8EHito-4:-Evaluaci%C3%B3n-y-mejora-estructural-del-sistema)
+### [📒 Hito 4 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/04.%F0%9F%93%8EHito-4:-Evaluaci%C3%B3n-y-mejora-estructural-del-sistema)
