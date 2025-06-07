@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAuth } from '../../context';
 
 // Estilos para la página Home
 const HomeContainer = styled.div`
@@ -19,7 +20,24 @@ const Container = styled.div`
   }
 `;
 
-const Title = styled.h2`
+const WelcomeSection = styled.div`
+  text-align: center;
+  margin-bottom: 30px;
+`;
+
+const WelcomeMessage = styled.h2`
+  color: #2c3e50;
+  font-size: 1.6em;
+  margin-bottom: 10px;
+`;
+
+const UserInfo = styled.p`
+  color: #546e7a;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+`;
+
+const Title = styled.h3`
   color: #2c3e50;
   font-size: 1.4em;
   text-align: center;
@@ -94,9 +112,38 @@ const Button = styled(Link)`
 `;
 
 const Home = () => {
+  const { userProfile } = useAuth();
+
+  // Función para obtener el saludo según la hora del día
+  const getSaludo = () => {
+    const hora = new Date().getHours();
+    if (hora < 12) return 'Buenos días';
+    if (hora < 18) return 'Buenas tardes';
+    return 'Buenas noches';
+  };
+
+  // Función para formatear el rol del usuario
+  const formatearRol = (role) => {
+    const roles = {
+      'administrador': 'Administrador',
+      'usuario-privado': 'Usuario Privado',
+      'usuario-publico': 'Usuario Público'
+    };
+    return roles[role] || role;
+  };
+
   return (
     <HomeContainer>
       <Container>
+        {/* <WelcomeSection>
+          <WelcomeMessage>
+            {getSaludo()}, {userProfile?.username || 'Usuario'}
+          </WelcomeMessage>
+          <UserInfo>
+            Rol: {formatearRol(userProfile?.role) || 'Cargando...'}
+          </UserInfo>
+        </WelcomeSection> */}
+        
         <Title>Menú Principal</Title>
         
         <ButtonsContainer>

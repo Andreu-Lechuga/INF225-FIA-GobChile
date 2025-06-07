@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import { getErrorMessage, showUserError } from '../../utils/errorHandler';
 
 // Estilos para la página de lista de boletines
 const ListContainer = styled.div`
@@ -71,6 +72,30 @@ const EmptyMessage = styled.p`
   padding: 20px 0;
 `;
 
+const ErrorMessage = styled.div`
+  background-color: #fee;
+  border: 1px solid #fcc;
+  color: #c33;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  text-align: center;
+`;
+
+const RetryButton = styled.button`
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  
+  &:hover {
+    background-color: #2980b9;
+  }
+`;
+
 const NavFooter = styled.div`
   text-align: center;
   margin-top: 20px;
@@ -103,28 +128,38 @@ const ReturnButton = styled(Link)`
 const BoletinList = () => {
   const [boletines, setBoletines] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Función para cargar boletines
+  const fetchBoletines = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await axios.get('/api/boletines');
+      
+      if (response.data && response.data.status === 'success') {
+        setBoletines(response.data.data);
+      } else {
+        throw new Error('Formato de respuesta inválido');
+      }
+    } catch (error) {
+      const errorMessage = showUserError(error, 'Error al cargar los boletines');
+      setError(errorMessage);
+      setBoletines([]);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   useEffect(() => {
-    // Carga de datos desde el backend
-    const fetchBoletines = async () => {
-      try {
-        const response = await axios.get('/api/boletines');
-        
-        if (response.data && response.data.status === 'success') {
-          setBoletines(response.data.data);
-        } else {
-          throw new Error('Formato de respuesta inválido');
-        }
-        
-        setLoading(false);
-      } catch (error) {
-        console.error('Error al cargar los boletines:', error);
-        setLoading(false);
-      }
-    };
-    
     fetchBoletines();
   }, []);
+  
+  // Función para reintentar la carga
+  const handleRetry = () => {
+    fetchBoletines();
+  };
   
   return (
     <ListContainer>
@@ -133,6 +168,13 @@ const BoletinList = () => {
         
         {loading ? (
           <p>Cargando boletines...</p>
+        ) : error ? (
+          <ErrorMessage>
+            <p>{error}</p>
+            <RetryButton onClick={handleRetry}>
+              Reintentar
+            </RetryButton>
+          </ErrorMessage>
         ) : boletines.length > 0 ? (
           boletines.map(boletin => (
             <BoletinItem key={boletin.id}>

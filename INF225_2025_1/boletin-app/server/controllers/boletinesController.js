@@ -1,17 +1,30 @@
 // Importar el modelo de Boletin
-const { Boletin } = require('../models/Boletin');
+const { supabase } = require('../config/supabase');
+
+// Función auxiliar para calcular días transcurridos
+const calcularDiasTranscurridos = (fechaRegistro) => {
+  const fecha = new Date(fechaRegistro);
+  const hoy = new Date();
+  const diferencia = hoy - fecha;
+  return Math.floor(diferencia / (1000 * 60 * 60 * 24));
+};
 
 // Controladores
 const boletinesController = {
   // Obtener todos los boletines
   getAllBoletines: async (req, res) => {
     try {
-      const boletines = await Boletin.findAll();
+      const { data: boletines, error } = await supabase
+        .from('boletines')
+        .select('*')
+        .order('fecha_registro', { ascending: false });
+      
+      if (error) throw error;
       
       const formattedBoletines = boletines.map(boletin => ({
         id: boletin.id,
         titulo: boletin.titulo,
-        temas: typeof boletin.temas === 'string' ? JSON.parse(boletin.temas) : boletin.temas,
+        temas: boletin.temas,
         fecha: new Date(boletin.fecha_registro).toLocaleDateString('es-ES'),
         estado: boletin.estado
       }));
@@ -32,14 +45,19 @@ const boletinesController = {
   // Obtener el estado de los boletines
   getEstadoBoletines: async (req, res) => {
     try {
-      const boletines = await Boletin.findAll();
+      const { data: boletines, error } = await supabase
+        .from('boletines')
+        .select('*')
+        .order('fecha_registro', { ascending: false });
+      
+      if (error) throw error;
       
       const estadoBoletines = boletines.map(boletin => ({
         id: boletin.id,
         titulo: boletin.titulo,
-        temas: typeof boletin.temas === 'string' ? JSON.parse(boletin.temas) : boletin.temas,
+        temas: boletin.temas,
         fecha_registro: new Date(boletin.fecha_registro).toLocaleDateString('es-ES'),
-        dias_transcurridos: Boletin.diasTranscurridos(boletin.fecha_registro),
+        dias_transcurridos: calcularDiasTranscurridos(boletin.fecha_registro),
         estado: boletin.estado
       }));
       
@@ -60,23 +78,21 @@ const boletinesController = {
   getBoletinById: async (req, res) => {
     try {
       const { id } = req.params;
-      const boletin = await Boletin.findByPk(id);
       
-      if (!boletin) {
-        return res.status(404).json({
-          status: 'error',
-          message: `No se encontró un boletín con el ID ${id}`
-        });
-      }
+      const { data: boletin, error } = await supabase
+        .from('boletines')
+        .select('*')
+        .eq('id', id)
+        .single();
       
-      // Parsear el campo temas si es una cadena JSON
-      if (boletin.temas && typeof boletin.temas === 'string') {
-        boletin.temas = JSON.parse(boletin.temas);
-      }
-      
-      // Parsear el campo resultados_api si es una cadena JSON
-      if (boletin.resultados_api && typeof boletin.resultados_api === 'string') {
-        boletin.resultados_api = JSON.parse(boletin.resultados_api);
+      if (error) {
+        if (error.code === 'PGRST116') {
+          return res.status(404).json({
+            status: 'error',
+            message: `No se encontró un boletín con el ID ${id}`
+          });
+        }
+        throw error;
       }
       
       res.json({
@@ -106,13 +122,19 @@ const boletinesController = {
       }
       
       // Crear nuevo boletín
-      const newBoletin = await Boletin.create({
-        titulo,
-        temas,
-        plazo,
-        comentarios,
-        estado: 'Registrado'
-      });
+      const { data: newBoletin, error } = await supabase
+        .from('boletines')
+        .insert([{
+          titulo,
+          temas,
+          plazo,
+          comentarios,
+          estado: 'Registrado'
+        }])
+        .select()
+        .single();
+      
+      if (error) throw error;
       
       res.status(201).json({
         status: 'success',
@@ -132,25 +154,42 @@ const boletinesController = {
   updateBoletin: async (req, res) => {
     try {
       const { id } = req.params;
-      const { titulo, temas, plazo, comentarios, estado } = req.body;
+      const { titulo, temas, plazo, comentarios, estado, resultados_api } = req.body;
       
-      const boletin = await Boletin.findByPk(id);
+      // Verificar si el boletín existe
+      const { data: existingBoletin, error: checkError } = await supabase
+        .from('boletines')
+        .select('id')
+        .eq('id', id)
+        .single();
       
-      if (!boletin) {
+      if (checkError && checkError.code === 'PGRST116') {
         return res.status(404).json({
           status: 'error',
           message: `No se encontró un boletín con el ID ${id}`
         });
       }
       
+      if (checkError) throw checkError;
+      
+      // Preparar datos para actualizar
+      const updateData = {};
+      if (titulo !== undefined) updateData.titulo = titulo;
+      if (temas !== undefined) updateData.temas = temas;
+      if (plazo !== undefined) updateData.plazo = plazo;
+      if (comentarios !== undefined) updateData.comentarios = comentarios;
+      if (estado !== undefined) updateData.estado = estado;
+      if (resultados_api !== undefined) updateData.resultados_api = resultados_api;
+      
       // Actualizar boletín
-      const updatedBoletin = await Boletin.update(id, {
-        titulo,
-        temas,
-        plazo,
-        comentarios,
-        estado
-      });
+      const { data: updatedBoletin, error } = await supabase
+        .from('boletines')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+      
+      if (error) throw error;
       
       res.json({
         status: 'success',
@@ -170,16 +209,30 @@ const boletinesController = {
   deleteBoletin: async (req, res) => {
     try {
       const { id } = req.params;
-      const boletin = await Boletin.findByPk(id);
       
-      if (!boletin) {
+      // Verificar si el boletín existe
+      const { data: existingBoletin, error: checkError } = await supabase
+        .from('boletines')
+        .select('id')
+        .eq('id', id)
+        .single();
+      
+      if (checkError && checkError.code === 'PGRST116') {
         return res.status(404).json({
           status: 'error',
           message: `No se encontró un boletín con el ID ${id}`
         });
       }
       
-      await Boletin.destroy(id);
+      if (checkError) throw checkError;
+      
+      // Eliminar boletín
+      const { error } = await supabase
+        .from('boletines')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
       
       res.json({
         status: 'success',

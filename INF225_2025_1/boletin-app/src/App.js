@@ -14,6 +14,7 @@ import SignUp from './pages/Auth/SignUp';
 // Importar componentes comunes
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
+import DebugAuth from './components/DebugAuth';
 
 // Estilos globales
 const AppContainer = styled.div`

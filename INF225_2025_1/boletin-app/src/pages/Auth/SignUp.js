@@ -152,20 +152,43 @@ const SignUpSchema = Yup.object().shape({
 });
 
 const SignUp = () => {
-  const { signup, error } = useAuth();
+  const { signup, error, loading } = useAuth();
   const navigate = useNavigate();
   const [signupError, setSignupError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
+      setIsSubmitting(true);
+      setSignupError(''); // Limpiar errores previos
+      setSuccessMessage(''); // Limpiar mensajes previos
+      
       // Eliminar confirmPassword antes de enviar los datos
       const { confirmPassword, ...userData } = values;
-      await signup(userData);
-      navigate('/'); // Redirigir al inicio después del registro exitoso
+      const result = await signup(userData);
+      
+      // Si el registro es exitoso
+      if (result && result.user) {
+        console.log('Registro exitoso:', result.user);
+        
+        // Verificar si el usuario necesita confirmar email
+        if (!result.user.email_confirmed_at) {
+          setSuccessMessage('Registro exitoso. Por favor, revise su email para confirmar su cuenta antes de iniciar sesión.');
+        } else {
+          setSuccessMessage('Registro exitoso. Redirigiendo...');
+          setTimeout(() => {
+            navigate('/'); // Redirigir al inicio después del registro exitoso
+          }, 2000);
+        }
+      }
     } catch (err) {
-      setSignupError('Error al registrar usuario. Por favor, intente nuevamente.');
+      console.error('Error en handleSubmit:', err);
+      // El error ya se maneja en el contexto, pero podemos mostrar uno específico aquí
+      setSignupError(err.message || 'Error al registrar usuario. Por favor, intente nuevamente.');
     } finally {
       setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
   
@@ -181,13 +204,19 @@ const SignUp = () => {
           </AlertMessage>
         )}
         
+        {successMessage && (
+          <AlertMessage type="success">
+            {successMessage}
+          </AlertMessage>
+        )}
+        
         <Formik
           initialValues={{ 
             username: '', 
             email: '', 
             password: '', 
             confirmPassword: '',
-            role: 'usuario-publico' // Valor por defecto
+            role: '' // Sin valor por defecto - el usuario debe seleccionar
           }}
           validationSchema={SignUpSchema}
           onSubmit={handleSubmit}
@@ -245,6 +274,7 @@ const SignUp = () => {
                   id="role" 
                   name="role"
                 >
+                  <option value="">Seleccione un rol</option>
                   <option value="administrador">Administrador</option>
                   <option value="usuario-privado">Usuario Privado</option>
                   <option value="usuario-publico">Usuario Público</option>

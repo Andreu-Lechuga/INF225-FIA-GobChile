@@ -1,8 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { testConnection } = require('./config/db');
-const { initDatabase } = require('./db/init');
-const authRoutes = require('./routes/authRoutes');
+const { testConnection } = require('./config/supabase');
 const boletinRoutes = require('./routes/boletinRoutes');
 
 // Crear la aplicación Express
@@ -15,7 +13,6 @@ app.use(express.json()); // Parsear solicitudes JSON
 app.use(express.urlencoded({ extended: true })); // Parsear solicitudes URL-encoded
 
 // Rutas
-app.use('/api/auth', authRoutes);
 app.use('/api/boletines', boletinRoutes);
 
 // Ruta de prueba
@@ -26,20 +23,18 @@ app.get('/', (req, res) => {
 // Iniciar el servidor
 const startServer = async () => {
   try {
-    // Probar la conexión a la base de datos
+    // Probar la conexión a Supabase
     const dbConnected = await testConnection();
     
     if (!dbConnected) {
-      console.error('No se pudo conectar a la base de datos. Asegúrese de que MySQL esté en ejecución.');
+      console.error('No se pudo conectar a Supabase. Verifique las variables de entorno.');
       process.exit(1);
     }
-    
-    // Inicializar la base de datos
-    await initDatabase();
     
     // Iniciar el servidor
     app.listen(PORT, () => {
       console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+      console.log('Conectado a Supabase exitosamente');
     });
   } catch (error) {
     console.error('Error al iniciar el servidor:', error);

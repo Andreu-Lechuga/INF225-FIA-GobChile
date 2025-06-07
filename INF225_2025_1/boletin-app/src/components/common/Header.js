@@ -139,12 +139,22 @@ const LoginButton = styled(Link)`
 `;
 
 const Header = () => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, userProfile, logout } = useAuth();
   const navigate = useNavigate();
   
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+  
+  // Función para formatear el rol del usuario
+  const formatearRol = (role) => {
+    const roles = {
+      'administrador': 'Administrador',
+      'usuario-privado': 'Usuario Privado',
+      'usuario-publico': 'Usuario Público'
+    };
+    return roles[role] || role;
   };
   
   return (
@@ -168,8 +178,8 @@ const Header = () => {
           <UserSection>
             <UserInfoContainer>
               <UserInfo>
-                <UserName>{currentUser.username}</UserName>
-                <UserRole>{currentUser.role}</UserRole>
+                <UserName>{userProfile?.username || 'Usuario'}</UserName>
+                <UserRole>{formatearRol(userProfile?.role) || 'Cargando...'}</UserRole>
               </UserInfo>
               <LogoutButton onClick={handleLogout}>
                 Cerrar Sesión

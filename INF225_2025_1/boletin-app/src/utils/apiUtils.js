@@ -1,4 +1,5 @@
 import { CACHE_CONFIG, RETRY_CONFIG } from '../api/config/apiConfig';
+import { getErrorMessage, logError } from './errorHandler';
 
 // Caché simple en memoria
 const apiCache = new Map();
@@ -74,6 +75,9 @@ export const retryOperation = async (
     } catch (error) {
       lastError = error;
       
+      // Log del error con contexto
+      logError(error, `Intento ${attempt + 1}/${maxRetries + 1} de operación`);
+      
       // Si es el último intento, no esperamos
       if (attempt === maxRetries) {
         break;
@@ -81,14 +85,16 @@ export const retryOperation = async (
       
       // Calcular el tiempo de espera con backoff exponencial
       const waitTime = delay * Math.pow(2, attempt);
-      console.log(`Reintento ${attempt + 1}/${maxRetries} después de ${waitTime}ms`);
+      console.log(`Reintento ${attempt + 1}/${maxRetries} después de ${waitTime}ms - Error: ${getErrorMessage(error)}`);
       
       // Esperar antes del siguiente intento
       await new Promise(resolve => setTimeout(resolve, waitTime));
     }
   }
   
-  throw lastError;
+  // Lanzar error con mensaje legible
+  const errorMessage = getErrorMessage(lastError);
+  throw new Error(`Operación falló después de ${maxRetries + 1} intentos: ${errorMessage}`);
 };
 
 /**

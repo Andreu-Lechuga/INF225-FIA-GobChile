@@ -118,26 +118,39 @@ const AlertMessage = styled.div`
 
 // Esquema de validación con Yup
 const LoginSchema = Yup.object().shape({
-  username: Yup.string()
-    .required('El nombre de usuario es obligatorio'),
+  email: Yup.string()
+    .email('Correo electrónico inválido')
+    .required('El correo electrónico es obligatorio'),
   password: Yup.string()
     .required('La contraseña es obligatoria')
     .min(6, 'La contraseña debe tener al menos 6 caracteres')
 });
 
 const Login = () => {
-  const { login, error } = useAuth();
+  const { login, error, loading } = useAuth();
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      await login(values);
-      navigate('/'); // Redirigir al inicio después del login exitoso
+      setIsSubmitting(true);
+      setLoginError(''); // Limpiar errores previos
+      
+      const result = await login(values);
+      
+      // Si el login es exitoso, redirigir
+      if (result && result.user) {
+        console.log('Login exitoso:', result.user);
+        navigate('/'); // Redirigir al inicio después del login exitoso
+      }
     } catch (err) {
-      setLoginError('Credenciales inválidas. Por favor, intente nuevamente.');
+      console.error('Error en handleSubmit:', err);
+      // El error ya se maneja en el contexto, pero podemos mostrar uno específico aquí
+      setLoginError(err.message || 'Error al iniciar sesión. Por favor, intente nuevamente.');
     } finally {
       setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
   
@@ -154,21 +167,21 @@ const Login = () => {
         )}
         
         <Formik
-          initialValues={{ username: '', password: '' }}
+          initialValues={{ email: '', password: '' }}
           validationSchema={LoginSchema}
           onSubmit={handleSubmit}
         >
           {({ isSubmitting, errors, touched }) => (
             <Form>
               <FormGroup>
-                <Label htmlFor="username">Usuario</Label>
+                <Label htmlFor="email">Correo Electrónico</Label>
                 <Input 
-                  type="text" 
-                  id="username" 
-                  name="username" 
-                  placeholder="Ingrese su nombre de usuario" 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  placeholder="Ingrese su correo electrónico" 
                 />
-                <ErrorMessage name="username" component={ErrorText} />
+                <ErrorMessage name="email" component={ErrorText} />
               </FormGroup>
               
               <FormGroup>
