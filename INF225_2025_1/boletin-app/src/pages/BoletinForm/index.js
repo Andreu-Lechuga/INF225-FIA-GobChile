@@ -3,7 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import styled from 'styled-components';
-import axios from 'axios';
+// import axios from 'axios'; // Comentado - ya no se usa para API externa
+import { SeleccionFuentes, SeleccionTemas } from '../../components/ui';
+// import { newsCatcherService } from '../../api/services/newsCatcherService'; // Comentado - API externa deshabilitada
+import { supabaseUtils } from '../../api/supabase';
 
 // Datos de Custom Tags organizados por categorías
 const customTagsData = [
@@ -62,39 +65,87 @@ const conceptToCustomTags = {
   // Prácticas Agrícolas
   "Labranza": ["Tillage techniques", "Soil preparation", "Land cultivation"],
   "Siembra Directa": ["No-till farming", "Direct seeding", "Zero tillage"],
-  "Compostaje & Abonado Organico": ["Composting methods", "Organic fertilization", "Biofertilizers"],
-  "Rotacion de Cultivos": ["Crop rotation systems", "Succession planting", "Field rotation"],
-  "Fertilizacion Quimica / Mineral": ["Chemical fertilizers", "Mineral nutrients", "NPK fertilization"],
+  "Compostaje & Abonado Orgánico": ["Composting methods", "Organic fertilization", "Biofertilizers"],
+  "Rotación de Cultivos": ["Crop rotation systems", "Succession planting", "Field rotation"],
+  "Fertilización Química / Mineral": ["Chemical fertilizers", "Mineral nutrients", "NPK fertilization"],
   "Control de Maleza": ["Weed management", "Herbicide application", "Weed control strategies"],
   "Poda": ["Pruning techniques", "Tree trimming", "Canopy management"],
+  
+  // Manejo de Agua
+  "Riego por Gravedad": ["Gravity irrigation", "Surface irrigation", "Flood irrigation"],
+  "Riego por Aspersión": ["Sprinkler systems", "Overhead irrigation", "Spray irrigation"],
+  "Riego por Goteo": ["Drip irrigation", "Micro-irrigation", "Trickle systems"],
+  "Riego Subterráneo": ["Subsurface irrigation", "Underground watering", "Root zone irrigation"],
+  "Drenaje": ["Agricultural drainage", "Water removal systems", "Field drainage"],
+  "Captación de Agua de Lluvia": ["Rainwater harvesting", "Water catchment", "Precipitation collection"],
   
   // Tipos de Cultivos
   "Policultivos": ["Polyculture systems", "Mixed cropping", "Companion planting"],
   "Monocultivos": ["Monoculture farming", "Single-crop cultivation", "Industrial agriculture"],
   "Cultivos anuales": ["Annual crops", "Seasonal farming", "Yearly harvest"],
-  "Cultivo Estacionales": ["Winter crops", "Summer crops", "Seasonal planting", "Spring cultivation"],
+  "Cultivos Estacionales": ["Winter crops", "Summer crops", "Seasonal planting", "Spring cultivation"],
   "Cultivos perennes": ["Perennial agriculture", "Long-term crops", "Multi-year plants"],
   "Cultivos de Cobertura": ["Cover crops", "Green manure", "Soil protection plants"],
-  "Cultivos Hidroponicos": ["Hydroponic systems", "Soilless cultivation", "Water-based farming"],
+  "Cultivos Hidropónicos": ["Hydroponic systems", "Soilless cultivation", "Water-based farming"],
   "Cultivos de Invernadero": ["Greenhouse production", "Protected cultivation", "Controlled environment agriculture"],
   
-  // Manejo de Agua
-  "Riego por Gravedad": ["Gravity irrigation", "Surface irrigation", "Flood irrigation"],
-  "Riego por Aspersion": ["Sprinkler systems", "Overhead irrigation", "Spray irrigation"],
-  "Riego por Goteo": ["Drip irrigation", "Micro-irrigation", "Trickle systems"],
-  "Riego Subterraneo": ["Subsurface irrigation", "Underground watering", "Root zone irrigation"],
-  "Drenaje": ["Agricultural drainage", "Water removal systems", "Field drainage"],
-  "Captacion de Agua de Lluvia": ["Rainwater harvesting", "Water catchment", "Precipitation collection"],
-  
   // Clima
-  "Precipitacion": ["Rainfall patterns", "Precipitation data", "Rain distribution"],
-  "Sequia": ["Drought conditions", "Water scarcity", "Dry farming"],
+  "Precipitación": ["Rainfall patterns", "Precipitation data", "Rain distribution"],
+  "Sequía": ["Drought conditions", "Water scarcity", "Dry farming"],
   "Humedad": ["Humidity levels", "Moisture management", "Air moisture"],
-  "Radiacion Solar": ["Solar radiation", "Sunlight exposure", "Light intensity"],
+  "Radiación Solar": ["Solar radiation", "Sunlight exposure", "Light intensity"],
   "Viento": ["Wind patterns", "Air movement", "Wind protection"],
   "Heladas": ["Frost protection", "Freezing temperatures", "Cold damage prevention"],
   "Microclimas": ["Microclimate management", "Local climate conditions", "Environmental niches"]
 };
+
+// Datos para el componente SeleccionFuentes
+const fuentesParaSeleccion = [
+  {
+    id: "1",
+    nombre: "Académicas",
+    urls: [
+      "https://scholar.google.com",
+      "https://jstor.org",
+      "https://pubmed.ncbi.nlm.nih.gov",
+      "https://scielo.org",
+      "https://researchgate.net"
+    ]
+  },
+  {
+    id: "2", 
+    nombre: "Científicas",
+    urls: [
+      "https://nature.com",
+      "https://science.org",
+      "https://cell.com",
+      "https://plos.org",
+      "https://springer.com"
+    ]
+  },
+  {
+    id: "3",
+    nombre: "Gubernamentales", 
+    urls: [
+      "https://gob.cl",
+      "https://minagri.gob.cl",
+      "https://fia.cl",
+      "https://odepa.gob.cl",
+      "https://sag.gob.cl"
+    ]
+  },
+  {
+    id: "4",
+    nombre: "Noticias",
+    urls: [
+      "https://emol.com",
+      "https://latercera.com",
+      "https://cooperativa.cl",
+      "https://biobiochile.cl",
+      "https://elmostrador.cl"
+    ]
+  }
+];
 
 // Estilos para la página del formulario
 const FormContainer = styled.div`
@@ -216,15 +267,71 @@ const SubmitButton = styled.button`
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(52, 73, 94, 0.2);
   
-  &:hover {
+  &:hover:not(:disabled) {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(52, 73, 94, 0.3);
   }
   
-  &:active {
+  &:active:not(:disabled) {
     transform: translateY(1px);
     box-shadow: 0 2px 10px rgba(52, 73, 94, 0.2);
   }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+`;
+
+const ApiStatusContainer = styled.div`
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #f8f9fa;
+`;
+
+const ApiStatusTitle = styled.h4`
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 1em;
+`;
+
+const LoadingSpinner = styled.div`
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
+const ApiErrorMessage = styled.div`
+  color: #e74c3c;
+  font-size: 0.9em;
+  margin-top: 10px;
+  padding: 10px;
+  background: #fdf2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+`;
+
+const ApiSuccessMessage = styled.div`
+  color: #16a085;
+  font-size: 0.9em;
+  margin-top: 10px;
+  padding: 10px;
+  background: #f0fdfa;
+  border: 1px solid #a7f3d0;
+  border-radius: 6px;
 `;
 
 const NavFooter = styled.div`
@@ -425,8 +532,6 @@ const validationSchema = Yup.object({
   titulo: Yup.string()
     .required('El título es obligatorio')
     .max(50, 'El título no debe exceder los 50 caracteres'),
-  tiposFuentes: Yup.array()
-    .min(1, 'Debe seleccionar al menos un tipo de fuente'),
   span: Yup.string()
     .required('Debe seleccionar un periodo de búsqueda'),
   comentarios: Yup.string()
@@ -436,6 +541,14 @@ const validationSchema = Yup.object({
 const BoletinForm = () => {
   const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState([]);
+  // Estado para el nuevo componente SeleccionFuentes (mantenido para futuro uso)
+  const [fuentesSeleccionadas, setFuentesSeleccionadas] = useState([]);
+  
+  // Función para manejar el cambio de temas seleccionados
+  const handleTemasChange = (temasSeleccionados) => {
+    setSelectedTags(temasSeleccionados);
+    console.log('Temas seleccionados:', temasSeleccionados);
+  };
   
   // Función para validar que al menos un tag esté seleccionado
   const validateTags = () => {
@@ -452,72 +565,68 @@ const BoletinForm = () => {
       return;
     }
     
-    // Procesar periodo de búsqueda
-    let from, to;
-    to = new Date().toISOString().split('T')[0];
-    
-    switch(values.span) {
-      case '3_meses':
-        from = getDateXMonthsAgo(3);
-        break;
-      case '6_meses':
-        from = getDateXMonthsAgo(6);
-        break;
-      case '1_año':
-        from = getDateXMonthsAgo(12);
-        break;
-      case '3_años':
-        from = getDateXMonthsAgo(36);
-        break;
-      case '5_años':
-        from = getDateXMonthsAgo(60);
-        break;
-      default:
-        from = getDateXMonthsAgo(3); // Por defecto, 3 meses
-    }
-    
-    // Convertir los conceptos seleccionados a Custom Tags para la búsqueda API
-    const customTagsForSearch = selectedTags.flatMap(concept => conceptToCustomTags[concept] || []);
-    
-    // Construir consulta basada en los Custom Tags
-    const query = customTagsForSearch.join(' OR ');
-    
-    // Configurar parámetros de búsqueda
-    let searchParams = {
-      from,
-      to,
-      search_in: 'title,summary,content',
-      tiposFuentes: values.tiposFuentes
-    };
-    
-    // Preparar datos para enviar al backend
-    const formData = {
-      titulo: values.titulo,
-      temas: selectedTags,
-      plazo: values.span,
-      comentarios: values.comentarios || 'Sin comentarios adicionales',
-      estado: 'Registrado'
-    };
-    
     try {
-      // Enviar datos al backend
-      const response = await axios.post('/api/boletines', formData);
+      console.log('=== INICIANDO CREACIÓN DE BOLETÍN ===');
       
-      // Realizar búsqueda con NewsCatcher API
-      // import { newsCatcherService } from '../../api/services/newsCatcherService';
-      // 
-      // newsCatcherService.searchBySourceTypes(query, values.tiposFuentes, { from, to })
-      //   .then(results => {
-      //     console.log('Resultados de la búsqueda:', results);
-      //     // Procesar resultados y actualizar boletín
-      //   });
+      // Generar conceptos a partir de los temas seleccionados
+      const conceptos = selectedTags.flatMap(tema => conceptToCustomTags[tema] || []);
       
-      console.log('Boletín creado:', response.data);
-      alert('Boletín registrado correctamente');
-      navigate('/estado-boletines');
+      // Preparar datos para crear el boletín
+      const boletinData = {
+        titulo: values.titulo,
+        temas: selectedTags,           // Array de temas seleccionados
+        conceptos: conceptos,          // Array de conceptos generados automáticamente
+        plazo: values.span,
+        comentarios: values.comentarios || 'Sin comentarios adicionales',
+        estado: 'En Revision'          // Nuevo estado por defecto
+      };
+      
+      console.log('Datos del boletín a enviar:', boletinData);
+      
+      // Intentar crear boletín directamente en Supabase primero
+      try {
+        console.log('Intentando crear boletín directamente en Supabase...');
+        const newBoletin = await supabaseUtils.createBoletin(boletinData);
+        console.log('Boletín creado exitosamente en Supabase:', newBoletin);
+        
+        // Mostrar mensaje de éxito
+        alert('Boletín creado correctamente y guardado en la base de datos');
+        
+        // Redirigir a la lista de boletines
+        navigate('/boletines');
+        
+      } catch (supabaseError) {
+        console.error('Error al crear boletín directamente en Supabase:', supabaseError);
+        
+        // Si falla Supabase directo, intentar a través del backend
+        console.log('Intentando crear boletín a través del backend...');
+        
+        const response = await fetch('http://localhost:5000/api/boletines', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(boletinData)
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.message || 'Error al crear el boletín');
+        }
+        
+        console.log('Boletín creado exitosamente a través del backend:', result);
+        
+        // Mostrar mensaje de éxito
+        alert('Boletín creado correctamente y guardado en la base de datos');
+        
+        // Redirigir a la lista de boletines
+        navigate('/boletines');
+      }
+      
     } catch (error) {
-      console.error('Error al crear el boletín:', error);
-      alert('Error al registrar el boletín. Por favor, intente nuevamente.');
+      console.error('Error completo al crear el boletín:', error);
+      alert(`Error al crear el boletín: ${error.message}. Por favor, revise la consola para más detalles.`);
     } finally {
       setSubmitting(false);
     }
@@ -538,7 +647,6 @@ const BoletinForm = () => {
         <Formik
           initialValues={{
             titulo: '',
-            tiposFuentes: [],
             span: '3_meses',
             comentarios: ''
           }}
@@ -561,32 +669,46 @@ const BoletinForm = () => {
                 <ErrorMessage name="titulo" component={ErrorText} />
               </FormGroup>
               
-              <Field name="tiposFuentes">
-                {({ field, form }) => (
-                  <MultiSelect
-                    label="Tipos de Fuentes"
-                    options={[
-                      "Académicas",
-                      "Científicas",
-                      "Gubernamentales",
-                      "Noticias",
-                      "Todas las anteriores"
-                    ]}
-                    value={field.value}
-                    onChange={value => form.setFieldValue('tiposFuentes', value)}
-                    error={form.errors.tiposFuentes && form.touched.tiposFuentes ? form.errors.tiposFuentes : null}
-                  />
+              {/* Selección de Fuentes */}
+              <FormGroup style={{ marginTop: '30px', marginBottom: '30px' }}>
+                <SeleccionFuentes 
+                  fuentesIniciales={fuentesParaSeleccion}
+                  onSelectionChange={(seleccionadas) => {
+                    setFuentesSeleccionadas(seleccionadas);
+                    console.log('Fuentes seleccionadas:', seleccionadas);
+                  }}
+                />
+                {fuentesSeleccionadas.length > 0 && (
+                  <div style={{ 
+                    marginTop: '15px', 
+                    padding: '10px', 
+                    backgroundColor: '#e8f5e8', 
+                    borderRadius: '8px', 
+                    fontSize: '0.9em' 
+                  }}>
+                    <strong>Seleccionadas:</strong> {fuentesSeleccionadas.join(', ')}
+                  </div>
                 )}
-              </Field>
+              </FormGroup>
               
-              <FormGroup>
-                <Label>Temas de Interés</Label>
-                <CustomTagsSelector 
-                  selectedTags={selectedTags} 
-                  onChange={setSelectedTags} 
+              {/* Selección de Temas */}
+              <FormGroup style={{ marginTop: '30px', marginBottom: '30px' }}>
+                <SeleccionTemas 
+                  onSelectionChange={handleTemasChange}
                 />
                 {validateTags() && (
                   <ErrorText>{validateTags()}</ErrorText>
+                )}
+                {selectedTags.length > 0 && (
+                  <div style={{ 
+                    marginTop: '15px', 
+                    padding: '10px', 
+                    backgroundColor: '#e8f5e8', 
+                    borderRadius: '8px', 
+                    fontSize: '0.9em' 
+                  }}>
+                    <strong>Temas seleccionados:</strong> {selectedTags.join(', ')}
+                  </div>
                 )}
               </FormGroup>
               
@@ -615,7 +737,7 @@ const BoletinForm = () => {
               </FormGroup>
               
               <SubmitButton type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Enviando...' : 'Generar Boletín'}
+                {isSubmitting ? 'Creando Boletín...' : 'Generar Boletín'}
               </SubmitButton>
             </Form>
           )}

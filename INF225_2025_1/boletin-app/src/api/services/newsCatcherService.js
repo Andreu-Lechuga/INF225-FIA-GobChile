@@ -14,6 +14,7 @@ const getDateXMonthsAgo = (months) => {
 
 /**
  * Definición de las listas de URLs para cada tipo de fuente
+ * IMPORTANTE: Los nombres de las categorías deben coincidir exactamente con los del BoletinForm
  */
 const sourcesByType = {
   "Académicas": [

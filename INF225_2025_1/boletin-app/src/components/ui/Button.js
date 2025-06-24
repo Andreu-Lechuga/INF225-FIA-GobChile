@@ -97,15 +97,23 @@ const buttonVariants = {
 
 // Tamaños de botones
 const buttonSizes = {
+  compact: css`
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    font-size: 0.9em;
+    border-radius: 6px;
+  `,
   small: css`
-    min-width: 120px;
+    min-width: 100px;
     padding: 8px 15px;
     font-size: 0.9em;
   `,
   medium: css`
-    min-width: 180px;
-    padding: 12px 25px;
-    font-size: 1em;
+    min-width: 140px;
+    padding: 10px 20px;
+    font-size: 0.95em;
   `,
   large: css`
     min-width: 250px;

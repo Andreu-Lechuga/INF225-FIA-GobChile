@@ -111,30 +111,46 @@ const boletinesController = {
   // Crear un nuevo boletín
   createBoletin: async (req, res) => {
     try {
-      const { titulo, temas, plazo, comentarios } = req.body;
+      console.log('=== CREANDO NUEVO BOLETÍN ===');
+      console.log('Datos recibidos:', req.body);
       
-      // Validaciones
-      if (!titulo || !temas || !plazo || !comentarios) {
+      const { titulo, temas, conceptos, plazo, comentarios } = req.body;
+      
+      // Validaciones básicas
+      if (!titulo || !temas || !plazo) {
+        console.log('Error de validación: campos obligatorios faltantes');
         return res.status(400).json({
           status: 'error',
-          message: 'Todos los campos son obligatorios'
+          message: 'Los campos título, temas y plazo son obligatorios',
+          received: { titulo, temas, plazo, comentarios }
         });
       }
+      
+      // Preparar datos para insertar
+      const boletinData = {
+        titulo,
+        temas: Array.isArray(temas) ? temas : [temas],
+        conceptos: conceptos || null,
+        plazo,
+        comentarios: comentarios || 'Sin comentarios adicionales',
+        estado: 'En Revision'
+      };
+      
+      console.log('Datos preparados para insertar:', boletinData);
       
       // Crear nuevo boletín
       const { data: newBoletin, error } = await supabase
         .from('boletines')
-        .insert([{
-          titulo,
-          temas,
-          plazo,
-          comentarios,
-          estado: 'Registrado'
-        }])
+        .insert([boletinData])
         .select()
         .single();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error de Supabase:', error);
+        throw error;
+      }
+      
+      console.log('Boletín creado exitosamente:', newBoletin);
       
       res.status(201).json({
         status: 'success',
@@ -142,10 +158,13 @@ const boletinesController = {
         data: newBoletin
       });
     } catch (error) {
+      console.error('Error completo al crear boletín:', error);
       res.status(500).json({
         status: 'error',
         message: 'Error al crear el boletín',
-        error: error.message
+        error: error.message,
+        details: error.details || null,
+        hint: error.hint || null
       });
     }
   },
@@ -154,7 +173,7 @@ const boletinesController = {
   updateBoletin: async (req, res) => {
     try {
       const { id } = req.params;
-      const { titulo, temas, plazo, comentarios, estado, resultados_api } = req.body;
+      const { titulo, temas, conceptos, plazo, comentarios, estado, resultados_api } = req.body;
       
       // Verificar si el boletín existe
       const { data: existingBoletin, error: checkError } = await supabase
@@ -176,6 +195,7 @@ const boletinesController = {
       const updateData = {};
       if (titulo !== undefined) updateData.titulo = titulo;
       if (temas !== undefined) updateData.temas = temas;
+      if (conceptos !== undefined) updateData.conceptos = conceptos;
       if (plazo !== undefined) updateData.plazo = plazo;
       if (comentarios !== undefined) updateData.comentarios = comentarios;
       if (estado !== undefined) updateData.estado = estado;

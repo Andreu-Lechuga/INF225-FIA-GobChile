@@ -147,16 +147,6 @@ const Header = () => {
     navigate('/login');
   };
   
-  // Función para formatear el rol del usuario
-  const formatearRol = (role) => {
-    const roles = {
-      'administrador': 'Administrador',
-      'usuario-privado': 'Usuario Privado',
-      'usuario-publico': 'Usuario Público'
-    };
-    return roles[role] || role;
-  };
-  
   return (
     <HeaderContainer>
       <HeaderContent>
@@ -178,8 +168,8 @@ const Header = () => {
           <UserSection>
             <UserInfoContainer>
               <UserInfo>
-                <UserName>{userProfile?.username || 'Usuario'}</UserName>
-                <UserRole>{formatearRol(userProfile?.role) || 'Cargando...'}</UserRole>
+                <UserName>{userProfile?.username || currentUser?.email?.split('@')[0] || 'Usuario'}</UserName>
+                <UserRole>{userProfile?.role || 'Cargando...'}</UserRole>
               </UserInfo>
               <LogoutButton onClick={handleLogout}>
                 Cerrar Sesión

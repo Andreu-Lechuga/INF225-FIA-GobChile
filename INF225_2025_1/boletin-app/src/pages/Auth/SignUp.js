@@ -216,7 +216,7 @@ const SignUp = () => {
             email: '', 
             password: '', 
             confirmPassword: '',
-            role: '' // Sin valor por defecto - el usuario debe seleccionar
+            role: 'usuario-publico' // Valor por defecto para evitar errores
           }}
           validationSchema={SignUpSchema}
           onSubmit={handleSubmit}

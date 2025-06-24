@@ -7,14 +7,17 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env.local') });
 
 // Configuración de Supabase
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseServiceKey) {
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Variables de entorno faltantes:');
+  console.error('REACT_APP_SUPABASE_URL:', supabaseUrl ? 'Configurada' : 'FALTANTE');
+  console.error('REACT_APP_SUPABASE_ANON_KEY:', supabaseAnonKey ? 'Configurada' : 'FALTANTE');
   throw new Error('Las variables de entorno de Supabase no están configuradas correctamente');
 }
 
-// Cliente de Supabase para el servidor (con service role key)
-const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+// Cliente de Supabase para el servidor (con anon key - RLS deshabilitado)
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: false,
     persistSession: false

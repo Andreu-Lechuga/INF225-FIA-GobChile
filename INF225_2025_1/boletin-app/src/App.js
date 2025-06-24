@@ -15,6 +15,7 @@ import SignUp from './pages/Auth/SignUp';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import DebugAuth from './components/DebugAuth';
+import DebugRole from './components/DebugRole';
 
 // Estilos globales
 const AppContainer = styled.div`
@@ -97,6 +98,10 @@ function App() {
       {/* No mostrar Footer en páginas de autenticación */}
       {!location.pathname.includes('/login') && 
        !location.pathname.includes('/signup') && <Footer />}
+      
+      
+      
+      
     </AppContainer>
   );
 }

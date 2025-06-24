@@ -1,11 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const { testConnection } = require('./config/supabase');
+const { initializeDatabase } = require('./config/initDatabase');
 const boletinRoutes = require('./routes/boletinRoutes');
 
 // Crear la aplicación Express
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.SERVER_PORT || 5000;
 
 // Middleware
 app.use(cors()); // Permitir solicitudes CORS
@@ -31,10 +32,15 @@ const startServer = async () => {
       process.exit(1);
     }
     
+    // Inicializar la base de datos (crear tabla y datos de ejemplo si es necesario)
+    console.log('🔄 Inicializando base de datos...');
+    await initializeDatabase();
+    
     // Iniciar el servidor
     app.listen(PORT, () => {
       console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
       console.log('Conectado a Supabase exitosamente');
+      console.log('Base de datos inicializada correctamente');
     });
   } catch (error) {
     console.error('Error al iniciar el servidor:', error);

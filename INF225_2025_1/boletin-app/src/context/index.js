@@ -122,7 +122,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // Función para cargar el perfil del usuario
+  // Función para cargar el perfil del usuario (simplificada)
   const loadUserProfile = async (user) => {
     if (!user) {
       console.log('loadUserProfile: No user provided');
@@ -130,8 +130,20 @@ export const AuthProvider = ({ children }) => {
       return;
     }
     
-    // Crear perfil inmediatamente con datos disponibles
-    const immediateProfile = {
+    try {
+      // Intentar cargar desde la base de datos
+      const dbProfile = await profileUtils.getCurrentProfile();
+      if (dbProfile) {
+        console.log('Profile loaded from database:', dbProfile);
+        setUserProfile(dbProfile);
+        return;
+      }
+    } catch (err) {
+      console.error('loadUserProfile: Database error:', err);
+    }
+    
+    // Si no se puede cargar desde la base de datos, crear perfil temporal
+    const fallbackProfile = {
       id: user.id,
       username: user.user_metadata?.username || user.email?.split('@')[0] || 'Usuario',
       role: user.user_metadata?.role || 'usuario-publico',
@@ -139,18 +151,8 @@ export const AuthProvider = ({ children }) => {
       updated_at: new Date().toISOString()
     };
     
-    setUserProfile(immediateProfile);
-    
-    // Intentar cargar desde la base de datos en segundo plano
-    try {
-      const dbProfile = await profileUtils.getCurrentProfile();
-      if (dbProfile) {
-        setUserProfile(dbProfile);
-      }
-    } catch (err) {
-      console.error('loadUserProfile: Database error (using fallback):', err);
-      // Mantener el perfil inmediato si hay error en la base de datos
-    }
+    console.log('Using fallback profile:', fallbackProfile);
+    setUserProfile(fallbackProfile);
   };
 
   // Efecto para cargar la sesión inicial y suscribirse a cambios
@@ -195,7 +197,7 @@ export const AuthProvider = ({ children }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Función para registrar un nuevo usuario
+  // Función para registrar un nuevo usuario (SIMPLIFICADA)
   const signup = async (userData) => {
     try {
       setLoading(true);
@@ -203,20 +205,33 @@ export const AuthProvider = ({ children }) => {
       
       const { email, password, username, role } = userData;
       
-      // Usar los roles directamente como están definidos en la base de datos
+      // Simplificar validación de roles - siempre usar el rol proporcionado o default
+      const selectedRole = role || 'usuario-publico';
+      
+      console.log('Registrando usuario:', { email, username, role: selectedRole });
+      
+      // Registrar usuario con metadata
       const result = await authUtils.signUp(email, password, {
-        username,
-        role: role || 'usuario-publico'
+        username: username || email.split('@')[0],
+        role: selectedRole
       });
       
-      // Si el registro es exitoso, actualizar el estado inmediatamente
+      console.log('Registro exitoso:', result);
+      
+      // Actualizar estado inmediatamente si hay usuario
       if (result.user) {
         setCurrentUser(result.user);
         setSession(result.session);
-        // Cargar perfil si el usuario está confirmado
-        if (result.user.email_confirmed_at) {
-          await loadUserProfile(result.user);
-        }
+        
+        // El trigger debería crear el perfil automáticamente
+        // Intentar cargar el perfil después de un breve delay
+        setTimeout(async () => {
+          try {
+            await loadUserProfile(result.user);
+          } catch (profileError) {
+            console.warn('Perfil se creará automáticamente:', profileError);
+          }
+        }, 1000);
       }
       
       return result;

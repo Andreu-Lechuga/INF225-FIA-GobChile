@@ -193,7 +193,7 @@ export const authUtils = {
 
 // Funciones para manejar perfiles de usuario
 export const profileUtils = {
-  // Obtener perfil del usuario actual
+  // Obtener perfil del usuario actual (simplificado)
   async getCurrentProfile() {
     try {
       const user = await authUtils.getCurrentUser();
@@ -208,37 +208,16 @@ export const profileUtils = {
         .from('profiles')
         .select('*')
         .eq('id', user.id)
-        .single();
+        .maybeSingle(); // Usar maybeSingle en lugar de single para evitar errores si no existe
       
       if (error) {
         console.error('getCurrentProfile: Database error:', error);
-        
-        // Si no existe el perfil, intentar crearlo
-        if (error.code === 'PGRST116') { // No rows returned
-          console.log('getCurrentProfile: Profile not found, creating new profile');
-          
-          const newProfile = {
-            id: user.id,
-            username: user.user_metadata?.username || user.email?.split('@')[0] || 'Usuario',
-            role: user.user_metadata?.role || 'usuario-publico'
-          };
-          
-          const { data: createdProfile, error: createError } = await supabase
-            .from('profiles')
-            .insert([newProfile])
-            .select()
-            .single();
-          
-          if (createError) {
-            console.error('getCurrentProfile: Error creating profile:', createError);
-            throw createError;
-          }
-          
-          console.log('getCurrentProfile: Profile created successfully:', createdProfile);
-          return createdProfile;
-        }
-        
         throw error;
+      }
+      
+      if (!data) {
+        console.log('getCurrentProfile: Profile not found, will be created by trigger');
+        return null; // El trigger debería crear el perfil automáticamente
       }
       
       console.log('getCurrentProfile: Profile found:', data);
