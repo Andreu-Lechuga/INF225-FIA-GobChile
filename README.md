@@ -11,5 +11,5 @@
 ### [🔑 Hito 2 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/%F0%9F%94%8D-Hito-2:-Actualizaci%C3%B3n-Levantamiento-de-Proyecto)
 ### [🎫 Hito 3 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/%F0%9F%94%92-Hito-3:-Validaci%C3%B3n-de-Datos-Recolectados-mediante-API-de-Scraping)
 ### [📒 Hito 4 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/04.%F0%9F%93%8EHito-4:-Evaluaci%C3%B3n-y-mejora-estructural-del-sistema)
-### [📒 Hito 5 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/05.-%F0%9F%93%A6-Hito-5:-Inspecci%C3%B3n-y-Validaci%C3%B3n-Final-del-Sistema)
+### [📁 Hito 5 Wiki](https://github.com/Andreu-Lechuga/INF225-FIA-GobChile/wiki/05.-%F0%9F%93%A6-Hito-5:-Inspecci%C3%B3n-y-Validaci%C3%B3n-Final-del-Sistema)
 
